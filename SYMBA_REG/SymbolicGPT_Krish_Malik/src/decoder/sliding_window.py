@@ -38,203 +38,6 @@ eos_token_id = vocab["<EOS>"]
 Y = [seq + [eos_token_id] for seq in Y]
 
 # 2. Dataset + Validation Split
-class SymbolicDataset(Dataset):
-    def __init__(self, embeddings, token_seqs, pad_token_id, max_len=None):
-        self.embeddings = embeddings
-        self.token_seqs = token_seqs
-        self.pad_token_id = pad_token_id
-        self.max_len = max_len or max(len(seq) for seq in token_seqs)
-
-    def __len__(self):
-        return len(self.embeddings)
-
-    def __getitem__(self, idx):
-        x = self.embeddings[idx]
-        y = self.token_seqs[idx]
-        y_padded = y + [self.pad_token_id] * (self.max_len - len(y))
-        attention_mask = [1] * len(y) + [0] * (self.max_len - len(y))
-        return {
-            "embedding": x,
-            "target_ids": torch.tensor(y_padded, dtype=torch.long),
-            "attention_mask": torch.tensor(attention_mask, dtype=torch.bool),
-        }
-
-dataset = SymbolicDataset(X, Y, pad_token_id)
-val_size = int(0.2 * len(dataset))
-train_size = len(dataset) - val_size
-train_dataset, val_dataset = random_split(dataset, [train_size, val_size])
-
-train_loader = DataLoader(train_dataset, batch_size=8, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=8, shuffle=False)
-
-# 3. Sparse Attention with Limited Debug Prints
-class SparseAttention(nn.Module):
-    def __init__(self, embed_dim, num_heads, window_size=8, num_random=4, debug=False):
-        super().__init__()
-        self.attn = nn.MultiheadAttention(embed_dim, num_heads, batch_first=True)
-        self.window_size = window_size
-        self.num_random = num_random
-        self.debug = debug
-        self.debug_steps = 0
-
-    def forward(self, x):
-        B, T, D = x.shape
-        mask = torch.full((T, T), float("-inf"), device=x.device)
-
-        for i in range(T):
-            start = max(0, i - self.window_size)
-            end = i + 1
-            mask[i, start:end] = 0
-
-            if self.num_random > 0:
-                rand_idx = torch.randint(0, T, (self.num_random,), device=x.device)
-                mask[i, rand_idx] = 0
-
-        if self.debug and self.debug_steps < 2:
-            allowed = (mask[0] == 0).nonzero(as_tuple=True)[0].tolist()
-            print(f"[DEBUG] Token 0 allowed attention positions: {allowed}")
-            self.debug_steps += 1
-
-        attn_out, _ = self.attn(x, x, x, attn_mask=mask)
-        return attn_out
-
-# 4. GPT Decoder with Sparse Attention
-class SymbolicDecoder(nn.Module):
-    def __init__(self, vocab_size, embedding_dim=128, gpt_dim=256, n_layers=3, n_heads=2, max_len=100, debug=False):
-        super().__init__()
-        self.token_embedding = nn.Embedding(vocab_size, gpt_dim)
-        self.pos_embedding = nn.Parameter(torch.randn(1, max_len + 1, gpt_dim))
-        self.embedding_proj = nn.Linear(embedding_dim, gpt_dim)
-
-        self.layers = nn.ModuleList([
-            nn.ModuleDict({
-                "sparse_attn": SparseAttention(gpt_dim, n_heads, debug=debug),
-                "ff": nn.Sequential(
-                    nn.Linear(gpt_dim, 4 * gpt_dim),
-                    nn.ReLU(),
-                    nn.Linear(4 * gpt_dim, gpt_dim)
-                ),
-                "norm1": nn.LayerNorm(gpt_dim),
-                "norm2": nn.LayerNorm(gpt_dim),
-            }) for _ in range(n_layers)
-        ])
-
-        self.out = nn.Linear(gpt_dim, vocab_size)
-
-    def forward(self, embedding, target_ids):
-        B, T = target_ids.shape
-        tok_embed = self.token_embedding(target_ids)
-        context_tok = self.embedding_proj(embedding).unsqueeze(1)
-        x = torch.cat([context_tok, tok_embed], dim=1)
-        x = x + self.pos_embedding[:, :T+1, :]
-
-        for layer in self.layers:
-            attn_out = layer["sparse_attn"](x)
-            x = layer["norm1"](x + attn_out)
-            ff_out = layer["ff"](x)
-            x = layer["norm2"](x + ff_out)
-
-        logits = self.out(x[:, 1:, :])
-        return logits
-
-# 5. Training with Validation
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = SymbolicDecoder(
-    vocab_size=len(vocab),
-    embedding_dim=128,
-    gpt_dim=256,
-    n_layers=4,
-    n_heads=4,
-    max_len=dataset.max_len,
-    debug=True  # debug prints only first 2 steps
-).to(device)
-
-criterion = nn.CrossEntropyLoss(ignore_index=pad_token_id)
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3)
-
-train_losses = []
-val_losses = []
-
-num_epochs = 80
-for epoch in range(num_epochs):
-    model.train()
-    total_loss = 0
-    for batch in train_loader:
-        embedding = batch["embedding"].to(device)
-        target_ids = batch["target_ids"].to(device)
-        logits = model(embedding, target_ids)
-        loss = criterion(logits.view(-1, logits.size(-1)), target_ids.view(-1))
-
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        total_loss += loss.item()
-
-    avg_train_loss = total_loss / len(train_loader)
-    train_losses.append(avg_train_loss)
-
-    # Validation
-    model.eval()
-    val_loss = 0
-    with torch.no_grad():
-        for batch in val_loader:
-            embedding = batch["embedding"].to(device)
-            target_ids = batch["target_ids"].to(device)
-            logits = model(embedding, target_ids)
-            loss = criterion(logits.view(-1, logits.size(-1)), target_ids.view(-1))
-            val_loss += loss.item()
-
-    avg_val_loss = val_loss / len(val_loader)
-    val_losses.append(avg_val_loss)
-
-    print(f"Epoch {epoch+1} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f}")
-
-# 6. Plot Loss Curves
-plt.plot(train_losses, label="Train Loss")
-plt.plot(val_losses, label="Validation Loss")
-plt.xlabel("Epoch")
-plt.ylabel("Loss")
-plt.title("Training vs Validation Loss")
-plt.legend()
-plt.grid()
-plt.show()
-
-torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_debugged.pth")
-
-"""### Better generalisation and early stopping"""
-
-import json
-import numpy as np
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader, random_split
-import torch.nn.functional as F
-import matplotlib.pyplot as plt
-
-# 1. Load Data
-with open("./tnet_embeddings.json", "r") as f:
-    embeddings_data = json.load(f)
-with open("./tokenized_gpt_labels_postfix.json", "r") as f:
-    label_data = json.load(f)
-
-X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
-Y = label_data["tokenized_trees"]
-vocab = label_data["vocab"]
-
-# Add PAD and EOS tokens
-if "<PAD>" not in vocab:
-    vocab["<PAD>"] = max(vocab.values()) + 1
-pad_token_id = vocab["<PAD>"]
-
-if "<EOS>" not in vocab:
-    vocab["<EOS>"] = max(vocab.values()) + 1
-eos_token_id = vocab["<EOS>"]
-
-# Append EOS to every sequence
-Y = [seq + [eos_token_id] for seq in Y]
-
-# 2. Dataset + Validation Split
 # class SymbolicDataset(Dataset):
 #     def __init__(self, embeddings, token_seqs, pad_token_id, max_len=None):
 #         self.embeddings = embeddings
@@ -383,7 +186,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', fa
 
 train_losses, val_losses = [], []
 
-num_epochs = 50
+num_epochs = 80
 for epoch in range(num_epochs):
     model.train()
     total_loss = 0
@@ -407,12 +210,21 @@ for epoch in range(num_epochs):
     # Validation
     model.eval()
     val_loss = 0
+
     with torch.no_grad():
         for batch in val_loader:
             embedding = batch["embedding"].to(device)
             target_ids = batch["target_ids"].to(device)
+
             logits = model(embedding, target_ids)
-            loss = criterion(logits.view(-1, logits.size(-1)), target_ids.view(-1))
+
+            shifted_targets = target_ids[:, 1:].contiguous()
+
+            loss = criterion(
+                logits.view(-1, logits.size(-1)),
+                shifted_targets.view(-1)
+            )
+
             val_loss += loss.item()
 
     avg_val_loss = val_loss / len(val_loader)
@@ -444,7 +256,7 @@ from torch.utils.data import DataLoader
 # -----------------------------
 # 1. Load dataset + vocab
 # -----------------------------
-with open("/content/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
+with open("./tokenized_gpt_labels_postfix.json", "r") as f:
     label_data = json.load(f)
 
 vocab = label_data["vocab"]
@@ -458,7 +270,7 @@ eos_token_id = vocab["<EOS>"]
 # -----------------------------
 # 2. Load embeddings
 # -----------------------------
-with open("/content/tnet_embeddings_new.json", "r") as f:
+with open("./tnet_embeddings.json", "r") as f:
     embeddings_data = json.load(f)
 
 X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
@@ -550,7 +362,7 @@ class SymbolicDecoder(nn.Module):
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-checkpoint = torch.load("/content/symbolic_gpt_decoder_sparse_regularized.pth", map_location=device)
+checkpoint = torch.load("./symbolic_gpt_decoder_sparse_regularized.pth", map_location=device)
 pos_embedding_shape = checkpoint['pos_embedding'].shape
 saved_max_len = pos_embedding_shape[1] - 1
 
@@ -612,7 +424,7 @@ with torch.no_grad():
 # -----------------------------
 # 7. Save predictions.json
 # -----------------------------
-with open("/content/predictions.json", "w") as f:
+with open("./predictions.json", "w") as f:
     json.dump(predictions, f, indent=2)
 
 print("✅ Predictions saved to predictions.json")
