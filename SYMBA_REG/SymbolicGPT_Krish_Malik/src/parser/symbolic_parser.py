@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1faRlCvBg-c9p5bVjfuuv12q8rCpofgND
 """
 
-!pip install sympy --quiet
+#!pip install sympy --quiet
 
 import pandas as pd
 import sympy
@@ -20,7 +20,7 @@ import os
 import re
 
 #STEP 1: LOAD CSV FROM FILES SIDEBAR
-filename = "/content/Feynman_csv_edit.csv"
+filename = "./data/Feynman_csv_edit.csv"
 
 if not os.path.exists(filename):
     raise FileNotFoundError("❌ Please upload 'Feynman_csv_edit' in the Files sidebar first.")
@@ -67,6 +67,7 @@ def clean_formula_string(formula):
 
     return formula
 
+'''
 #Grammar Formatter (cleaned up for correctness)
 def format_expr_as_grammar(expr):
     if isinstance(expr, sympy.Symbol):
@@ -102,6 +103,42 @@ def format_expr_as_grammar(expr):
             return nested
     else:
         return str(expr)
+'''
+# UPGRADED: Postfix (Reverse Polish) Tokenizer
+def format_expr_as_grammar(expr):
+    # Base Cases: Leaf nodes (Variables or Numbers)
+    if isinstance(expr, sympy.Symbol):
+        sym_name = str(expr).replace('_sym', '') # Remove temporary suffix
+        return [sym_name]
+    elif expr == sympy.pi:
+        return ['pi']
+    elif expr == sympy.E:
+        return ['e']
+    elif isinstance(expr, sympy.Number):
+        # Round constants natively, bypassing his need for BFGS!
+        return [str(round(float(expr), 4))]
+
+    # Recursive Step: Operators and Functions
+    else:
+        tokens = []
+        args = list(expr.args)
+        
+        # 1. Post-Order: Traverse all children FIRST (Left, Right)
+        for arg in args:
+            tokens.extend(format_expr_as_grammar(arg))
+            
+        # 2. Post-Order: Append the parent operator LAST (Root)
+        op_map = {'Add': 'add', 'Mul': 'mul', 'Pow': 'pow'}
+        op = type(expr).__name__
+        mapped_op = op_map.get(op, op.lower())
+        
+        # Handle n-ary operations natively (e.g., x * y * z -> x y z mul mul)
+        if mapped_op in ['add', 'mul']:
+            tokens.extend([mapped_op] * (len(args) - 1))
+        else:
+            tokens.append(mapped_op)
+            
+        return tokens
 
 #Variable Extractor ===
 def extract_vars(row):
@@ -272,7 +309,7 @@ for idx, row in df.iterrows():
     })
 
 #STEP 3: SAVE TO JSON IN CONTENT
-output_file = "/content/feynman_parse_trees_7.json"
+output_file = "./feynman_parse_trees_postfix.json"
 with open(output_file, "w") as f:
     json.dump(parsed_entries, f, indent=2)
 

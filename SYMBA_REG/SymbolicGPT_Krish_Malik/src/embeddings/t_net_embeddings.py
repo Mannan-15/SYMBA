@@ -7,8 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1de5Fe8Do733JNVB3SE_T2JBAYKvwgqm8
 """
 
-from google.colab import files
-uploaded = files.upload()  # Upload your data_clouds.json here
+# from google.colab import files
+# uploaded = files.upload()  # Upload your data_clouds.json here
 
 import json
 import numpy as np
@@ -19,14 +19,14 @@ import torch.nn.functional as F
 
 # 2. Imports & Load JSON
 
-with open("data_clouds.json", "r") as f:
+with open("./data/data_clouds.json", "r") as f:
     data = json.load(f)
 
 print(f"✅ Loaded {len(data)} equations")
 
 
 # Determine the maximum feature dimension (D_max)
-=
+
 max_D = 0
 for entry in data:
     if entry["data"]: # Ensure data list is not empty

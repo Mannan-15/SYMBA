@@ -16,9 +16,9 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 # 1. Load Data
-with open("/content/tnet_embeddings_new.json", "r") as f:
+with open("./tnet_embeddings.json", "r") as f:
     embeddings_data = json.load(f)
-with open("/content/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
+with open("./tokenized_gpt_labels_postfix.json", "r") as f:
     label_data = json.load(f)
 
 X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
@@ -213,9 +213,9 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 # 1. Load Data
-with open("/content/tnet_embeddings_new.json", "r") as f:
+with open("./tnet_embeddings.json", "r") as f:
     embeddings_data = json.load(f)
-with open("/content/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
+with open("./tokenized_gpt_labels_postfix.json", "r") as f:
     label_data = json.load(f)
 
 X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
@@ -235,6 +235,27 @@ eos_token_id = vocab["<EOS>"]
 Y = [seq + [eos_token_id] for seq in Y]
 
 # 2. Dataset + Validation Split
+# class SymbolicDataset(Dataset):
+#     def __init__(self, embeddings, token_seqs, pad_token_id, max_len=None):
+#         self.embeddings = embeddings
+#         self.token_seqs = token_seqs
+#         self.pad_token_id = pad_token_id
+#         self.max_len = max_len or max(len(seq) for seq in token_seqs)
+
+#     def __len__(self):
+#         return len(self.embeddings)
+
+#     def __getitem__(self, idx):
+#         x = self.embeddings[idx]
+#         y = self.token_seqs[idx]
+#         y_padded = y + [self.pad_token_id] * (self.max_len - len(y))
+#         attention_mask = [1] * len(y) + [0] * (self.max_len - len(y))
+#         return {
+#             "embedding": x,
+#             "target_ids": torch.tensor(y_padded, dtype=torch.long),
+#             "attention_mask": torch.tensor(attention_mask, dtype=torch.bool),
+#         }
+
 class SymbolicDataset(Dataset):
     def __init__(self, embeddings, token_seqs, pad_token_id, max_len=None):
         self.embeddings = embeddings
@@ -248,14 +269,16 @@ class SymbolicDataset(Dataset):
     def __getitem__(self, idx):
         x = self.embeddings[idx]
         y = self.token_seqs[idx]
+        
+        # Pad the sequence
         y_padded = y + [self.pad_token_id] * (self.max_len - len(y))
-        attention_mask = [1] * len(y) + [0] * (self.max_len - len(y))
+        
+        # We don't need his attention_mask logic for this basic CrossEntropy setup
         return {
             "embedding": x,
             "target_ids": torch.tensor(y_padded, dtype=torch.long),
-            "attention_mask": torch.tensor(attention_mask, dtype=torch.bool),
         }
-
+        
 dataset = SymbolicDataset(X, Y, pad_token_id)
 val_size = int(0.2 * len(dataset))
 train_size = len(dataset) - val_size
@@ -308,18 +331,39 @@ class SymbolicDecoder(nn.Module):
         ])
         self.out = nn.Linear(gpt_dim, vocab_size)
 
+    # def forward(self, embedding, target_ids):
+    #     B, T = target_ids.shape
+    #     tok_embed = self.dropout(self.token_embedding(target_ids))
+    #     context_tok = self.embedding_proj(embedding).unsqueeze(1)
+    #     x = torch.cat([context_tok, tok_embed], dim=1)
+    #     x = x + self.pos_embedding[:, :T+1, :]
+    #     for layer in self.layers:
+    #         attn_out = layer["sparse_attn"](x)
+    #         x = layer["norm1"](x + attn_out)
+    #         ff_out = layer["ff"](x)
+    #         x = layer["norm2"](x + ff_out)
+    #     logits = self.out(x[:, 1:, :])
+    #     return logits
+    
     def forward(self, embedding, target_ids):
         B, T = target_ids.shape
-        tok_embed = self.dropout(self.token_embedding(target_ids))
+        
+        # SHIFT: The input to the transformer is all tokens except the last one
+        input_ids = target_ids[:, :-1] 
+        
+        tok_embed = self.dropout(self.token_embedding(input_ids))
         context_tok = self.embedding_proj(embedding).unsqueeze(1)
         x = torch.cat([context_tok, tok_embed], dim=1)
-        x = x + self.pos_embedding[:, :T+1, :]
+        x = x + self.pos_embedding[:, :T, :] # Adjust position embedding length
+        
         for layer in self.layers:
             attn_out = layer["sparse_attn"](x)
             x = layer["norm1"](x + attn_out)
             ff_out = layer["ff"](x)
             x = layer["norm2"](x + ff_out)
-        logits = self.out(x[:, 1:, :])
+            
+        # The logits predict the NEXT token, starting from index 1 (ignoring context_tok)
+        logits = self.out(x[:, 1:, :]) 
         return logits
 
 # 5. Training Loop
@@ -347,8 +391,11 @@ for epoch in range(num_epochs):
         embedding = batch["embedding"].to(device)
         target_ids = batch["target_ids"].to(device)
         logits = model(embedding, target_ids)
-        loss = criterion(logits.view(-1, logits.size(-1)), target_ids.view(-1))
-
+        # loss = criterion(logits.view(-1, logits.size(-1)), target_ids.view(-1))
+        # The model predicts everything AFTER the <SOS> token
+        shifted_targets = target_ids[:, 1:].contiguous()
+        loss = criterion(logits.view(-1, logits.size(-1)), shifted_targets.view(-1))
+        
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
