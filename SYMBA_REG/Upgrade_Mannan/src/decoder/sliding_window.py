@@ -387,7 +387,7 @@ if dataset.max_len != saved_max_len:
     loader = DataLoader(dataset, batch_size=1, shuffle=False)
 
 # -----------------------------
-# 6. Inference (greedy decode)
+# 6. Inference & Accuracy Calculation
 # -----------------------------
 def decode_tokens(token_ids):
     tokens = []
@@ -401,25 +401,46 @@ def decode_tokens(token_ids):
     return " ".join(tokens)
 
 predictions = []
+exact_matches = 0
+total_samples = 0
+
+print("Starting inference and calculating Exact Match Accuracy...")
+
 with torch.no_grad():
     for idx, batch in enumerate(loader):
         embedding = batch["embedding"].to(device)
         target_ids = batch["target_ids"].to(device)
 
-        # teacher-forced logits
+        # Get predictions
         logits = model(embedding, target_ids)
-
-        # keep as tensor, no .tolist()
         pred_ids = logits.argmax(-1).squeeze(0)
+        
+        # Shift targets for comparison
+        shifted_targets = target_ids[:, 1:].contiguous().squeeze(0)
 
+        # Decode to string expressions
         pred_expr = decode_tokens(pred_ids)
-        true_expr = decode_tokens(target_ids.squeeze(0))
+        true_expr = decode_tokens(shifted_targets)
+
+        # EXACT MATCH LOGIC: We strip whitespace to ensure pure structural comparison
+        if pred_expr.replace(" ", "") == true_expr.replace(" ", ""):
+            exact_matches += 1
+            
+        total_samples += 1
 
         predictions.append({
             "id": idx,
             "prediction": pred_expr,
             "ground_truth": true_expr
         })
+
+# Calculate final percentages
+accuracy = (exact_matches / total_samples) * 100
+
+print("========================================")
+print(f"✅ Inference Complete!")
+print(f"🎯 EXACT MATCH ACCURACY: {accuracy:.2f}% ({exact_matches}/{total_samples} perfect equations)")
+print("========================================")
 
 # -----------------------------
 # 7. Save predictions.json
