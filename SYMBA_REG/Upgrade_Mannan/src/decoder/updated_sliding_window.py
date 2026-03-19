@@ -21,7 +21,7 @@ inv_vocab = {v: k for k, v in vocab.items()}
 
 pad_token_id = vocab["<PAD>"]
 eos_token_id = vocab["<EOS>"]
-sos_token_id = vocab["<SOS>"]
+# sos_token_id = vocab["<SOS>"]
 
 # ==========================================
 # 2. DATASET 
@@ -145,13 +145,15 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=5e-4, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.7, patience=5)
 
 train_losses, val_losses = [], []
-num_epochs = 80
+train_accs, val_accs = [], []
+
+num_epochs = 50
 
 print(f"🚀 Starting Training for {num_epochs} epochs on {device}...")
 
 for epoch in range(num_epochs):
     model.train()
-    total_loss = 0
+    total_loss, total_correct, total_tokens = 0, 0, 0
     for batch in train_loader:
         embedding = batch["embedding"].to(device)
         target_ids = batch["target_ids"].to(device)
@@ -165,13 +167,20 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
+        
+        preds = logits.argmax(dim=-1)
+        mask = (shifted_targets != pad_token_id)
+        total_correct += ((preds == shifted_targets) & mask).sum().item()
+        total_tokens += mask.sum().item()
 
     avg_train_loss = total_loss / len(train_loader)
     train_losses.append(avg_train_loss)
+    avg_train_acc = (total_correct / total_tokens)*100
+    train_accs.append(avg_train_acc)
 
     # Validation Phase
     model.eval()
-    val_loss = 0
+    val_loss, val_correct, val_tokens = 0, 0, 0
     with torch.no_grad():
         for batch in val_loader:
             embedding = batch["embedding"].to(device)
@@ -180,91 +189,181 @@ for epoch in range(num_epochs):
             shifted_targets = target_ids[:, 1:].contiguous()
             loss = criterion(logits.view(-1, logits.size(-1)), shifted_targets.view(-1))
             val_loss += loss.item()
+            
+            preds = logits.argmax(dim=-1)
+            mask = (shifted_targets != pad_token_id)
+            val_correct += ((preds == shifted_targets) & mask).sum().item()
+            val_tokens += mask.sum().item()
 
     avg_val_loss = val_loss / len(val_loader)
+    avg_val_acc = (val_correct / val_tokens) * 100
     val_losses.append(avg_val_loss)
+    val_accs.append(avg_val_acc)
+    
     scheduler.step(avg_val_loss)
     
-    if (epoch + 1) % 5 == 0 or epoch == 0:
-        print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.6f} | Val Loss: {avg_val_loss:.6f}")
+    print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} || Train Acc: {avg_train_acc:.2f}% | Val Acc: {avg_val_acc:.2f}%")
 
-# --- PLOT LOSS CURVES ---
-plt.figure(figsize=(10, 6))
-plt.plot(range(1, num_epochs + 1), train_losses, label="Training Loss", color='blue', lw=2)
-plt.plot(range(1, num_epochs + 1), val_losses, label="Validation Loss", color='orange', linestyle='--', lw=2)
-plt.yscale('log') # Log scale helps see the drop from 2.0 to 0.0003 much better
-plt.xlabel("Epochs")
-plt.ylabel("Loss (Log Scale)")
-plt.title("Convergence Profile: Postfix Symbolic Transformer")
-plt.legend()
-plt.grid(True, which="both", ls="-", alpha=0.5)
-plt.savefig("training_convergence.png") # Saves a high-res version for your proposal
+# ==========================================
+# 6. Plot Loss and Accuracy on Dual Axes
+# ==========================================
+fig, ax1 = plt.subplots(figsize=(10, 5))
+
+# Plot Loss on left Y-axis
+color = 'tab:red'
+ax1.set_xlabel('Epoch')
+ax1.set_ylabel('Cross-Entropy Loss', color=color)
+ax1.plot(train_losses, label="Train Loss", color='red', linestyle='dashed')
+ax1.plot(val_losses, label="Validation Loss", color='darkred', linewidth=2)
+ax1.tick_params(axis='y', labelcolor=color)
+ax1.grid(alpha=0.3)
+
+# Plot Accuracy on right Y-axis
+ax2 = ax1.twinx()  
+color = 'tab:blue'
+ax2.set_ylabel('Token Accuracy (%)', color=color)  
+ax2.plot(train_accs, label="Train Accuracy", color='dodgerblue', linestyle='dashed')
+ax2.plot(val_accs, label="Validation Accuracy", color='blue', linewidth=2)
+ax2.tick_params(axis='y', labelcolor=color)
+
+fig.tight_layout()  
+plt.title("Training Loss vs. Next-Token Accuracy")
+fig.legend(loc="center right", bbox_to_anchor=(0.9, 0.5))
 plt.show()
 
-torch.save(model.state_dict(), "symbolic_gpt_baseline_beam.pth")
-print("✅ Model weights and Loss Plot saved.")
+torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
+
+# --- PLOT LOSS CURVES ---
+# plt.figure(figsize=(10, 6))
+# plt.plot(range(1, num_epochs + 1), train_losses, label="Training Loss", color='blue', lw=2)
+# plt.plot(range(1, num_epochs + 1), val_losses, label="Validation Loss", color='orange', linestyle='--', lw=2)
+# plt.yscale('log') # Log scale helps see the drop from 2.0 to 0.0003 much better
+# plt.xlabel("Epochs")
+# plt.ylabel("Loss (Log Scale)")
+# plt.title("Convergence Profile: Postfix Symbolic Transformer")
+# plt.legend()
+# plt.grid(True, which="both", ls="-", alpha=0.5)
+# plt.savefig("training_convergence.png") # Saves a high-res version for your proposal
+# plt.show()
+
+# torch.save(model.state_dict(), "symbolic_gpt_baseline_beam.pth")
+# print("✅ Model weights and Loss Plot saved.")
 
 # ==========================================
 # 6. BEAM SEARCH INFERENCE
 # ==========================================
-def decode_tokens(token_ids):
-    tokens = []
-    for t in token_ids:
-        t_val = t.item() if isinstance(t, torch.Tensor) else t
-        if t_val != pad_token_id and t_val != sos_token_id:
-            tokens.append(inv_vocab[t_val])
-    if "<EOS>" in tokens:
-        tokens = tokens[:tokens.index("<EOS>")]
-    return " ".join(tokens)
 
-def beam_search_decode(model, embedding, sos_id, eos_id, beam_width=5, max_len=60):
+def generate_next_token(model, embedding, generated_ids):
+    """
+    generated_ids: [1, t] — tokens generated so far (empty at first step)
+    Returns logits for the next token: [vocab_size]
+    """
+    if generated_ids.shape[1] == 0:
+        # First step: only the context token exists, no input tokens
+        context_tok = model.embedding_proj(embedding).unsqueeze(1)
+        x = context_tok + model.pos_embedding[:, :1, :]
+        for layer in model.layers:
+            attn_out = layer["sparse_attn"](x)
+            x = layer["norm1"](x + attn_out)
+            ff_out = layer["ff"](x)
+            x = layer["norm2"](x + ff_out)
+        return model.out(x[:, 0, :]).squeeze(0)  # [vocab_size]
+    else:
+        # Subsequent steps: context + generated tokens so far
+        tok_embed = model.token_embedding(generated_ids)
+        context_tok = model.embedding_proj(embedding).unsqueeze(1)
+        x = torch.cat([context_tok, tok_embed], dim=1)
+        x = x + model.pos_embedding[:, :x.shape[1], :]
+        for layer in model.layers:
+            attn_out = layer["sparse_attn"](x)
+            x = layer["norm1"](x + attn_out)
+            ff_out = layer["ff"](x)
+            x = layer["norm2"](x + ff_out)
+        logits = model.out(x[:, 1:, :])
+        return logits[:, -1, :].squeeze(0)  # last position [vocab_size]
+
+
+def beam_search_decode(model, embedding, eos_id, beam_width=5, max_len=60):
     model.eval()
-    start_seq = torch.tensor([[sos_id]], dtype=torch.long, device=device)
-    beams = [(start_seq, 0.0)]
-    
+    # Start with empty generated sequence — no PAD needed
+    beams = [(torch.zeros(1, 0, dtype=torch.long, device=device), 0.0)]
+
     with torch.no_grad():
         for step in range(max_len):
             all_candidates = []
             for seq, score in beams:
-                if seq[0, -1].item() == eos_id:
+                # Stop expanding finished beams
+                if seq.shape[1] > 0 and seq[0, -1].item() == eos_id:
                     all_candidates.append((seq, score))
                     continue
-                
-                logits = model(embedding, seq) 
-                next_token_logits = logits[:, -1, :] 
-                log_probs = F.log_softmax(next_token_logits, dim=-1).squeeze(0)
+
+                log_probs = F.log_softmax(
+                    generate_next_token(model, embedding, seq), dim=-1
+                )
                 topk_log_probs, topk_ids = torch.topk(log_probs, beam_width)
-                
+
                 for i in range(beam_width):
-                    next_token = topk_ids[i].unsqueeze(0).unsqueeze(0)
-                    new_seq = torch.cat([seq, next_token], dim=1)
+                    next_tok = topk_ids[i].view(1, 1)
+                    new_seq = torch.cat([seq, next_tok], dim=1)
                     new_score = score + topk_log_probs[i].item()
                     all_candidates.append((new_seq, new_score))
-            
-            ordered = sorted(all_candidates, key=lambda tup: tup[1], reverse=True)
-            beams = ordered[:beam_width]
-            if beams[0][0][0, -1].item() == eos_id:
+
+            beams = sorted(all_candidates, key=lambda x: x[1], reverse=True)[:beam_width]
+
+            # Stop if all beams have finished
+            if all(b[0].shape[1] > 0 and b[0][0, -1].item() == eos_id for b in beams):
                 break
-                
-    return beams[0][0].squeeze(0)
+
+    return beams[0][0].squeeze(0)  # best beam's token ids
+
+
+# ── Inference loop ──────────────────────────────────────────────────────────
+def decode_tokens(token_ids):
+    tokens = []
+    for t in token_ids:
+        t_val = t.item() if isinstance(t, torch.Tensor) else t
+        if t_val == eos_token_id:
+            break
+        if t_val != pad_token_id:
+            tokens.append(inv_vocab[t_val])
+    return " ".join(tokens)
 
 predictions = []
+exact_matches = 0
+total_samples = 0
+
+model.eval()
 for idx, batch in enumerate(val_loader):
     embedding = batch["embedding"].to(device)
     target_ids = batch["target_ids"].to(device)
-    
-    pred_ids = beam_search_decode(model, embedding, sos_token_id, eos_token_id, beam_width=5)
-    
+
+    pred_ids = beam_search_decode(model, embedding, eos_id=eos_token_id, beam_width=5)
+
     pred_expr = decode_tokens(pred_ids)
     true_expr = decode_tokens(target_ids.squeeze(0))
-    
+
+    is_match = pred_expr.replace(" ", "") == true_expr.replace(" ", "")
+    if is_match:
+        exact_matches += 1
+    total_samples += 1
+
     predictions.append({
         "id": idx,
         "prediction": pred_expr,
-        "ground_truth": true_expr
+        "ground_truth": true_expr,
+        "exact_match": is_match
     })
+
+accuracy = (exact_matches / total_samples) * 100
+print(f"🎯 EXACT MATCH: {accuracy:.2f}% ({exact_matches}/{total_samples})")
+
+failures = [p for p in predictions if not p["exact_match"]]
+print(f"\n❌ Sample Failures ({len(failures)} total):")
+for p in failures[:5]:
+    print(f"  PRED : {p['prediction']}")
+    print(f"  TRUTH: {p['ground_truth']}")
+    print()
 
 with open("./predictions.json", "w") as f:
     json.dump(predictions, f, indent=2)
-
-print("✅ Advanced Beam Search Predictions saved to predictions.json")
+    
