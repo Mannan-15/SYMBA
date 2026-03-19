@@ -16,7 +16,7 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 # 1. Load Data
-with open("./src/embeddings/tnet_embeddings_new.json", "r") as f:
+with open("./tnet_embeddings.json", "r") as f:
     embeddings_data = json.load(f)
 with open("./src/labels/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
     label_data = json.load(f)
@@ -254,7 +254,7 @@ torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
 # import matplotlib.pyplot as plt
 
 # # 1. Load Data
-# with open("./src/embeddings/tnet_embeddings_new.json", "r") as f:
+# with open("./tnet_embeddings.json", "r") as f:
 #     embeddings_data = json.load(f)
 # with open("./src/labels/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
 #     label_data = json.load(f)
@@ -452,7 +452,7 @@ eos_token_id = vocab["<EOS>"]
 # -----------------------------
 # 2. Load embeddings
 # -----------------------------
-with open("./src/embeddings/tnet_embeddings_new.json", "r") as f:
+with open("./tnet_embeddings.json", "r") as f:
     embeddings_data = json.load(f)
 
 X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
@@ -516,7 +516,7 @@ class SymbolicDecoder(nn.Module):
                 "ff": nn.Sequential(
                     nn.Linear(gpt_dim, 4 * gpt_dim),
                     nn.ReLU(),
-                    nn.Dropout(0.15),
+                    # nn.Dropout(0.15),
                     nn.Linear(4 * gpt_dim, gpt_dim)
                 ),
                 "norm1": nn.LayerNorm(gpt_dim),

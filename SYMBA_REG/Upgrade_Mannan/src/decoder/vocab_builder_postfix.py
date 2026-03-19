@@ -1,48 +1,74 @@
 import json
+import re
 from pathlib import Path
 
-# 1. Load your upgraded Postfix JSON
+# ── Config ──────────────────────────────────────────────────────────────────
+CONST_TOKEN = "<C>"   # replaces ALL numeric literals
+
+def is_numeric(tok):
+    """Return True if token is a raw number (int or float, pos or neg)."""
+    try:
+        float(tok)
+        return True
+    except ValueError:
+        return False
+
+# ── 1. Load postfix parse trees ──────────────────────────────────────────────
 input_file = Path("./feynman_parse_trees_postfix.json")
 with input_file.open("r") as f:
     data = json.load(f)
 
-# 2. Extract the clean token arrays directly (No parsing needed!)
-# Filter out any None values (failed parses)
-tokenized_trees = [entry["symbolic_parse_tree"] for entry in data if entry.get("symbolic_parse_tree")]
+valid_entries = [e for e in data if e.get("symbolic_parse_tree")]
+raw_trees     = [e["symbolic_parse_tree"] for e in valid_entries]
 
-# 3. Build the Vocabulary
-vocab = {}
-# Add special tokens first so they get IDs 0, 1, 2, 3
-special_tokens = ["<PAD>", "<SOS>", "<EOS>", "<UNK>"]
-for tok in special_tokens:
-    vocab[tok] = len(vocab)
+# ── 2. Normalize: replace every numeric token with <C> ───────────────────────
+def normalize(tokens):
+    return [CONST_TOKEN if is_numeric(tok) else tok for tok in tokens]
 
-# Add all the mathematical tokens
-for tokens in tokenized_trees:
+normalized_trees = [normalize(tree) for tree in raw_trees]
+
+# ── 3. Build vocabulary ───────────────────────────────────────────────────────
+# NOTE: No <SOS> — the embedding vector serves as the start signal
+special_tokens = ["<PAD>", "<EOS>", "<UNK>", CONST_TOKEN]
+vocab = {tok: i for i, tok in enumerate(special_tokens)}
+
+for tokens in normalized_trees:
     for tok in tokens:
         if tok not in vocab:
             vocab[tok] = len(vocab)
 
 print(f"Vocabulary size: {len(vocab)} tokens")
+print(f"Sample tokens: {list(vocab.keys())[:20]}")
 
-# 4. Convert token arrays to ID sequences (with <SOS> and <EOS>)
+# ── 4. Tokenize to ID sequences ───────────────────────────────────────────────
+eos_id = vocab["<EOS>"]
+unk_id = vocab["<UNK>"]
+
 tokenized_id_seqs = []
-for tokens in tokenized_trees:
-    # Get ID, fallback to <UNK> if somehow missing
-    ids = [vocab.get(tok, vocab["<UNK>"]) for tok in tokens] 
-    
-    # Wrap sequence in Start and End tags
-    final_sequence = [vocab["<SOS>"]] + ids + [vocab["<EOS>"]]
-    tokenized_id_seqs.append(final_sequence)
+for tokens in normalized_trees:
+    ids = [vocab.get(tok, unk_id) for tok in tokens]
+    ids.append(eos_id)          # append EOS at end (no SOS at start)
+    tokenized_id_seqs.append(ids)
 
-# 5. Save the final Model-Ready JSON
+# ── 5. Save ───────────────────────────────────────────────────────────────────
 output = {
     "vocab": vocab,
-    "tokenized_trees": tokenized_id_seqs
+    "tokenized_trees": tokenized_id_seqs,
+
+    # Bonus: save original float values alongside, indexed by sample
+    # Useful if you later want to reconstruct exact expressions
+    "const_values": [
+        [tok for tok in tree if is_numeric(tok)]
+        for tree in raw_trees
+    ]
 }
 
 output_file = Path("./tokenized_gpt_labels_postfix.json")
 with output_file.open("w") as f:
     json.dump(output, f, indent=2)
 
-print(f"✅ Model-ready token IDs saved to {output_file}")
+print(f"✅ Saved to {output_file}")
+
+## What the output now looks like
+# Before:  [1, 4, 5, 6, ...]     where 4 = "-1.0", 5 = "3.14159", ...
+# After:   [q, m, <C>, mul, eos] where <C> covers ALL constants

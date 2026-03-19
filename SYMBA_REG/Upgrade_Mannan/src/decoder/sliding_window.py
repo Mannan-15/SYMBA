@@ -125,7 +125,7 @@ class SymbolicDecoder(nn.Module):
                 "ff": nn.Sequential(
                     nn.Linear(gpt_dim, 4 * gpt_dim),
                     nn.ReLU(),
-                    nn.Dropout(0.15),
+                    # nn.Dropout(0.15),
                     nn.Linear(4 * gpt_dim, gpt_dim)
                 ),
                 "norm1": nn.LayerNorm(gpt_dim),
@@ -169,15 +169,12 @@ class SymbolicDecoder(nn.Module):
         logits = self.out(x[:, 1:, :]) 
         return logits
 
-# 5. Training Loop
+# ==========================================
+# 5. Training Loop with Accuracy Tracking
+# ==========================================
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = SymbolicDecoder(
-    vocab_size=len(vocab),
-    embedding_dim=128,
-    gpt_dim=256,
-    n_layers=3,
-    n_heads=4,
-    max_len=dataset.max_len
+    vocab_size=len(vocab), embedding_dim=128, gpt_dim=256, n_layers=3, n_heads=4, max_len=dataset.max_len
 ).to(device)
 
 criterion = nn.CrossEntropyLoss(ignore_index=pad_token_id)
@@ -185,63 +182,92 @@ optimizer = torch.optim.AdamW(model.parameters(), lr=5e-4, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.7, patience=5)
 
 train_losses, val_losses = [], []
+train_accs, val_accs = [], [] # NEW: Tracking Accuracy
 
-num_epochs = 80
+num_epochs = 50
 for epoch in range(num_epochs):
+    # --- TRAINING ---
     model.train()
-    total_loss = 0
+    total_loss, total_correct, total_tokens = 0, 0, 0
+    
     for batch in train_loader:
         embedding = batch["embedding"].to(device)
         target_ids = batch["target_ids"].to(device)
+        
         logits = model(embedding, target_ids)
-        # loss = criterion(logits.view(-1, logits.size(-1)), target_ids.view(-1))
-        # The model predicts everything AFTER the <SOS> token
         shifted_targets = target_ids[:, 1:].contiguous()
+        
         loss = criterion(logits.view(-1, logits.size(-1)), shifted_targets.view(-1))
         
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
         total_loss += loss.item()
+        
+        # NEW: Calculate Token Accuracy (ignoring padding)
+        preds = logits.argmax(dim=-1)
+        mask = (shifted_targets != pad_token_id)
+        total_correct += ((preds == shifted_targets) & mask).sum().item()
+        total_tokens += mask.sum().item()
 
     avg_train_loss = total_loss / len(train_loader)
+    avg_train_acc = (total_correct / total_tokens) * 100
     train_losses.append(avg_train_loss)
+    train_accs.append(avg_train_acc)
 
-    # Validation
+    # --- VALIDATION ---
     model.eval()
-    val_loss = 0
-
+    val_loss, val_correct, val_tokens = 0, 0, 0
     with torch.no_grad():
         for batch in val_loader:
             embedding = batch["embedding"].to(device)
             target_ids = batch["target_ids"].to(device)
-
+            
             logits = model(embedding, target_ids)
-
             shifted_targets = target_ids[:, 1:].contiguous()
-
-            loss = criterion(
-                logits.view(-1, logits.size(-1)),
-                shifted_targets.view(-1)
-            )
-
+            
+            loss = criterion(logits.view(-1, logits.size(-1)), shifted_targets.view(-1))
             val_loss += loss.item()
+            
+            # NEW: Calculate Validation Accuracy
+            preds = logits.argmax(dim=-1)
+            mask = (shifted_targets != pad_token_id)
+            val_correct += ((preds == shifted_targets) & mask).sum().item()
+            val_tokens += mask.sum().item()
 
     avg_val_loss = val_loss / len(val_loader)
+    avg_val_acc = (val_correct / val_tokens) * 100
     val_losses.append(avg_val_loss)
+    val_accs.append(avg_val_acc)
 
     scheduler.step(avg_val_loss)
+    print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} || Train Acc: {avg_train_acc:.2f}% | Val Acc: {avg_val_acc:.2f}%")
 
-    print(f"Epoch {epoch+1} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f}")
+# ==========================================
+# 6. Plot Loss and Accuracy on Dual Axes
+# ==========================================
+fig, ax1 = plt.subplots(figsize=(10, 5))
 
-# 6. Plot Loss Curves
-plt.plot(train_losses, label="Train Loss")
-plt.plot(val_losses, label="Validation Loss")
-plt.xlabel("Epoch")
-plt.ylabel("Loss")
-plt.title("Training vs Validation Loss")
-plt.legend()
-plt.grid()
+# Plot Loss on left Y-axis
+color = 'tab:red'
+ax1.set_xlabel('Epoch')
+ax1.set_ylabel('Cross-Entropy Loss', color=color)
+ax1.plot(train_losses, label="Train Loss", color='red', linestyle='dashed')
+ax1.plot(val_losses, label="Validation Loss", color='darkred', linewidth=2)
+ax1.tick_params(axis='y', labelcolor=color)
+ax1.grid(alpha=0.3)
+
+# Plot Accuracy on right Y-axis
+ax2 = ax1.twinx()  
+color = 'tab:blue'
+ax2.set_ylabel('Token Accuracy (%)', color=color)  
+ax2.plot(train_accs, label="Train Accuracy", color='dodgerblue', linestyle='dashed')
+ax2.plot(val_accs, label="Validation Accuracy", color='blue', linewidth=2)
+ax2.tick_params(axis='y', labelcolor=color)
+
+fig.tight_layout()  
+plt.title("Training Loss vs. Next-Token Accuracy")
+fig.legend(loc="center right", bbox_to_anchor=(0.9, 0.5))
 plt.show()
 
 torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
@@ -334,7 +360,7 @@ class SymbolicDecoder(nn.Module):
                 "ff": nn.Sequential(
                     nn.Linear(gpt_dim, 4 * gpt_dim),
                     nn.ReLU(),
-                    nn.Dropout(0.15),
+                    # nn.Dropout(0.15),
                     nn.Linear(4 * gpt_dim, gpt_dim)
                 ),
                 "norm1": nn.LayerNorm(gpt_dim),
@@ -345,15 +371,20 @@ class SymbolicDecoder(nn.Module):
 
     def forward(self, embedding, target_ids):
         B, T = target_ids.shape
-        tok_embed = self.token_embedding(target_ids)
+        
+        # ✅ Must match training: shift inputs
+        input_ids = target_ids[:, :-1]
+        tok_embed = self.token_embedding(input_ids)
         context_tok = self.embedding_proj(embedding).unsqueeze(1)
         x = torch.cat([context_tok, tok_embed], dim=1)
-        x = x + self.pos_embedding[:, :T+1, :]
+        x = x + self.pos_embedding[:, :T, :]  # ✅ :T not :T+1
+        
         for layer in self.layers:
             attn_out = layer["sparse_attn"](x)
             x = layer["norm1"](x + attn_out)
             ff_out = layer["ff"](x)
             x = layer["norm2"](x + ff_out)
+        
         logits = self.out(x[:, 1:, :])
         return logits
 
