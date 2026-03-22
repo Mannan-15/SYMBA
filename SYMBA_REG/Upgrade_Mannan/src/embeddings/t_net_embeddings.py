@@ -120,7 +120,7 @@ print(f"✅ Generated {len(embeddings)} embeddings")
 
 #6. Save and Download JSON
 
-with open("tnet_embeddings.json", "w") as f:
+with open("./src/embeddings/tnet_embeddings_my.json", "w") as f:
     json.dump(embeddings, f, indent=2)
 
 print("✅ Embeddings saved to tnet_embeddings.json")

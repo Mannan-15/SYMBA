@@ -14,7 +14,7 @@ def is_numeric(tok):
         return False
 
 # ── 1. Load postfix parse trees ──────────────────────────────────────────────
-input_file = Path("./feynman_parse_trees_postfix.json")
+input_file = Path("./src/parser/feynman_parse_trees_postfix.json")
 with input_file.open("r") as f:
     data = json.load(f)
 
@@ -63,7 +63,7 @@ output = {
     ]
 }
 
-output_file = Path("./tokenized_gpt_labels_postfix.json")
+output_file = Path("./src/labels/tokenized_gpt_labels_postfix.json")
 with output_file.open("w") as f:
     json.dump(output, f, indent=2)
 

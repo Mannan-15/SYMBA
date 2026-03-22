@@ -16,7 +16,7 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
 # 1. Load Data
-with open("./tnet_embeddings.json", "r") as f:
+with open("./src/embeddings/tnet_embeddings_my.json", "r") as f:
     embeddings_data = json.load(f)
 with open("./src/labels/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
     label_data = json.load(f)
@@ -250,7 +250,7 @@ fig.suptitle("Prefix Notation", fontsize=14, fontweight='bold')
 fig.tight_layout()  
 plt.show()
 
-torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
+torch.save(model.state_dict(), "./src/checkpoints/symbolic_gpt_decoder_sparse_regularized_old.pth")
 
 # """### Better generalisation and early stopping"""
 
@@ -263,7 +263,7 @@ torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
 # import matplotlib.pyplot as plt
 
 # # 1. Load Data
-# with open("./tnet_embeddings.json", "r") as f:
+# with open("./src/embeddings/tnet_embeddings_my.json", "r") as f:
 #     embeddings_data = json.load(f)
 # with open("./src/labels/tokenized_gpt_labels_with_full_funcs.json", "r") as f:
 #     label_data = json.load(f)
@@ -461,7 +461,7 @@ eos_token_id = vocab["<EOS>"]
 # -----------------------------
 # 2. Load embeddings
 # -----------------------------
-with open("./tnet_embeddings.json", "r") as f:
+with open("./src/embeddings/tnet_embeddings_my.json", "r") as f:
     embeddings_data = json.load(f)
 
 X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
@@ -558,7 +558,7 @@ class SymbolicDecoder(nn.Module):
 # -----------------------------
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-checkpoint = torch.load("./symbolic_gpt_decoder_sparse_regularized.pth", map_location=device)
+checkpoint = torch.load("./src/checkpoints/symbolic_gpt_decoder_sparse_regularized_old.pth", map_location=device)
 pos_embedding_shape = checkpoint['pos_embedding'].shape
 saved_max_len = pos_embedding_shape[1] - 1
 
@@ -641,7 +641,7 @@ print("========================================")
 # -----------------------------
 # 7. Save predictions.json
 # -----------------------------
-with open("./predictions.json", "w") as f:
+with open("./data/predictions_prefix.json", "w") as f:
     json.dump(predictions, f, indent=2)
 
-print("✅ Predictions saved to predictions.json")
+print("✅ Predictions saved to predictions_prefix.json")

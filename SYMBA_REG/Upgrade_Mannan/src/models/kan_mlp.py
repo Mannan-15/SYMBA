@@ -2,14 +2,14 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
-from efficient_kan import KAN # Make sure you pip installed efficient-kan
+from efficient_kan import KAN
 
 # 1. Generate Synthetic Physics Data: Damped Harmonic Oscillator
 # Equation: y = e^(-0.1 * x) * sin(3 * x)
 torch.manual_seed(42)
 X = torch.linspace(0, 10, 500).unsqueeze(1)
 y_true = torch.exp(-0.1 * X) * torch.sin(3 * X)
-y_noisy = y_true + torch.randn_like(y_true) * 0.05 # Add 5% sensor noise
+y_noisy = y_true + torch.randn_like(y_true) * 0.05 # Add 5% noise
 
 # 2. Define standard PyTorch MLP (Baseline)
 class StandardMLP(nn.Module):
@@ -17,7 +17,7 @@ class StandardMLP(nn.Module):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(1, 32),
-            nn.Tanh(), # Tanh is usually best for smooth physics curves
+            nn.Tanh(), 
             nn.Linear(32, 32),
             nn.Tanh(),
             nn.Linear(32, 1)

@@ -9,9 +9,9 @@ import matplotlib.pyplot as plt
 # ==========================================
 # 1. LOAD DATA (Local Postfix Files)
 # ==========================================
-with open("./tnet_embeddings.json", "r") as f:
+with open("./src/embeddings/tnet_embeddings_my.json", "r") as f:
     embeddings_data = json.load(f)
-with open("./tokenized_gpt_labels_postfix.json", "r") as f:
+with open("./src/labels/tokenized_gpt_labels_postfix.json", "r") as f:
     label_data = json.load(f)
 
 X = [torch.tensor(e["embedding"], dtype=torch.float32) for e in embeddings_data]
@@ -207,7 +207,6 @@ for epoch in range(num_epochs):
     print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} (PPL: {ppl_train:.2f}) | Val Loss: {avg_val_loss:.4f} (PPL: {ppl_val:.2f}) || Train Acc: {avg_train_acc:.2f}% | Val Acc: {avg_val_acc:.2f}%")
     
 # ==========================================
-# ==========================================
 # 6. Plot Loss and Accuracy on Dual Axes
 # ==========================================
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
@@ -238,23 +237,7 @@ fig.tight_layout()
 fig.suptitle("Training Loss vs. Next-Token Accuracy")
 plt.show()
 
-torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
-
-# --- PLOT LOSS CURVES ---
-# plt.figure(figsize=(10, 6))
-# plt.plot(range(1, num_epochs + 1), train_losses, label="Training Loss", color='blue', lw=2)
-# plt.plot(range(1, num_epochs + 1), val_losses, label="Validation Loss", color='orange', linestyle='--', lw=2)
-# plt.yscale('log') # Log scale helps see the drop from 2.0 to 0.0003 much better
-# plt.xlabel("Epochs")
-# plt.ylabel("Loss (Log Scale)")
-# plt.title("Convergence Profile: Postfix Symbolic Transformer")
-# plt.legend()
-# plt.grid(True, which="both", ls="-", alpha=0.5)
-# plt.savefig("training_convergence.png") # Saves a high-res version for your proposal
-# plt.show()
-
-# torch.save(model.state_dict(), "symbolic_gpt_baseline_beam.pth")
-# print("✅ Model weights and Loss Plot saved.")
+torch.save(model.state_dict(), "./src/checkpoints/symbolic_gpt_decoder_sparse_regularized.pth")
 
 # ==========================================
 # 6. BEAM SEARCH INFERENCE
@@ -371,6 +354,6 @@ for p in failures[:5]:
     print(f"  TRUTH: {p['ground_truth']}")
     print()
 
-with open("./predictions.json", "w") as f:
+with open("./data/predictions_beam.json", "w") as f:
     json.dump(predictions, f, indent=2)
-    
+print("✅ Predictions saved to predictions_beam.json")

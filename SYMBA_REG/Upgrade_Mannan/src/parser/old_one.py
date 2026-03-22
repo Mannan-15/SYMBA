@@ -270,7 +270,7 @@ for idx, row in df.iterrows():
     })
 
 #STEP 3: SAVE TO JSON IN CONTENT
-output_file = "./feynman_parse_trees_7.json"
+output_file = "./src/parser/feynman_parse_trees_old.json"
 with open(output_file, "w") as f:
     json.dump(parsed_entries, f, indent=2)
 
