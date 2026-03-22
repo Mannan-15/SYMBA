@@ -1,152 +1,80 @@
-# SymbolicGPT: Symbolic Regression via T-Net Embeddings and GPT Decoder
+# Symba 2026: Next-Gen Transformers for Symbolic Regression
 
-This project implements symbolic regression using **T-Net embeddings**, a **GPT-style decoder**, and a **concept library** to model and rediscover scientific equations from the **Feynman dataset**.
-It is part of the ML4SCI / Symba Lab work during **Google Summer of Code (GSoC)**.
+**Read the Full GSoC 2026 Proposal:** [Symba 2026 Proposal (Google Docs)](https://docs.google.com/document/d/1WaaLbe_9OeSylVhjENV5TdaDmsZNnZ357YENC6tNcUw/edit?usp=sharing)
+
+Welcome to my experimental repository for the ML4SCI Symba project. This codebase contains the Proof of Concept (PoC) experiments and architectural upgrades designed for my GSoC 2026 proposal. 
+
+This repository directly addresses the following ML4SCI Common Tasks:
+
+> **Common Task 1.1: Dataset Preprocessing**
+> **Dataset:** [AI Feynman](https://space.mit.edu/home/tegmark/aifeynman.html) *(Note: Authors not affiliated with ML4SCI)*
+> **Description:** Download the `Feynman_with_units.tar.gz` features and corresponding `FeynmanEquations.csv` targets. Preprocess and tokenize the target data and document your rationale for the choice of tokenization.
+
+> **Common Task 2.6: Next-Gen Transformers Seeding Generative Models**
+> **Description:** Use a Transformer model to seed a generative technique for symbolic regression. Build on previous code solutions from ML4SCI GSoC 2025 combining models and generative frameworks.
 
 ---
 
-## Project Structure
+## How to Run the Models
 
+To replicate my experiments and run the proposed architectures locally, follow these steps:
 
-```
-├── data/
-│   ├── Feynman_csv_edit.csv          # Ground truth equations dataset
-│   ├── data_cloud.py                 # Data cloud generation utilities
-│   ├── data_clouds.json              # Pre-generated example data clouds
-│   ├── feynman_parse_trees.json      # Parsed Feynman diagram trees
-│   └── predictions.json              # Model predictions output (new)
-│
-├── src/
-│   ├── parser/
-│   │   └── symbolic_parser.py        # Core equation → parse tree converter
-│   │
-│   ├── embeddings/
-│   │   ├── t_net_embeddings.py       # T-Net embedding implementation
-│   │   ├── tnet_embeddings.json      # Pre-computed embeddings (legacy)
-│   │   └── tnet_embeddings_new.json  # Improved embeddings (local focus)
-│   │
-│   ├── decoder/
-│   │   ├── decoder.py                # GPT-style transformer decoder
-│   │   ├── masking_decoder_setup.py  # Masked language modeling utilities
-│   │   └── sliding_window.py         # Sliding-window sparse decoder (new)
-│   │
-│   ├── library/
-│   │   └── learned_library.py        # Concept subtree library management
-│   │
-│   └── labels/
-│       ├── tokenized_gpt_labels.json           # Baseline tokenized labels
-│       └── tokenized_gpt_labels_with_full_funcs.json  # Enhanced labels with concept library
-            # Medium blog post documentation
+**1. Clone the repository and navigate to the upgrade directory:**
+```bash
+git clone [https://github.com/Mannan-15/SYMBA.git](https://github.com/Mannan-15/SYMBA.git)
+cd ./SYMBA_REG/Upgrade_Mannan
 ```
 
-## Directory Overview  
+2. Run the Proposed Postfix Decoder (Standard Inference):
 
-#### `/data/`  
-Contains all datasets, preprocessed artifacts, and model outputs. These form the foundation for training, evaluation, and analysis.  
+```bash
+python3 src/models/sliding_window.py
+```
 
-- **Feynman_csv_edit.csv** → Core dataset of physics equations (Feynman equations). Serves as ground truth for symbolic regression tasks.  
-- **data_cloud.py** → Script for generating “data clouds”: synthetic samples around each equation, simulating noisy experimental observations.  
-- **data_clouds.json** → Serialized data clouds produced by `data_cloud.py`. Contains equation-specific numerical datasets for training.  
-- **feynman_parse_trees.json** → JSON representation of Feynman equations as structured parse trees, used for supervised symbolic parsing and concept library training.  
-- **predictions.json** → Stores latest model inference results (predicted equations). Used for evaluation against ground truth.  
+3. Run the Beam Search Inference (Generative Seeding):
 
----
+To run the Top-K beam search decoder used to uncover exposure bias and seed the M
 
-#### `/src/`  
-Core implementation, organized into functional modules.  
+```bash
+python3 src/baselines/old_sliding_window.py
+```
 
-#### `/parser/`  
-Responsible for converting equations into machine-readable structures.  
-- **symbolic_parser.py** → Converts string equations (e.g., `"E = mc^2"`) into structured parse trees. Provides alignment between symbolic outputs and dataset trees.  
+4. Run the Legacy Prefix Baseline (For Comparison):
 
-#### `/embeddings/`  
-Encodes symbolic expressions into dense numerical vectors.  
-- **t_net_embeddings.py** → T-Net architecture for embedding equations into fixed-length representations.  
-- **tnet_embeddings.json** → Precomputed embeddings (older version) emphasizing dataset-wide variation.  
-- **tnet_embeddings_new.json** → Improved embeddings with **local feature sensitivity**, optimized for sliding-window sparse decoding.  
+To run the original 2024/2025 baseline model and observe the sequence bloat and baseline accuracy:
 
-#### `/decoder/`  
-Implements generative models to decode embeddings into symbolic equations.  
-- **decoder.py** → GPT-style autoregressive transformer decoder.  
-- **masking_decoder_setup.py** → Utilities for masked sequence modeling and training setup.  
-- **sliding_window.py** → Implements memory-efficient **sliding-window sparse attention** for long-sequence decoding.  
+```bash
+python3 src/models/updated_sliding_window.py
+```
 
-#### `/library/`  
-Encapsulates reusable symbolic concepts.  
-- **learned_library.py** → Maintains a **concept library** of frequently used subtrees (e.g., `sin(x)`, `x^2 + y^2`). Enables compositional reuse during generation.  
+## Key Experiments & Architectural Updates
 
-#### `/labels/`  
-Provides tokenized supervision for training the decoder.  
-- **tokenized_gpt_labels.json** → Baseline tokenized labels aligned with dataset.  
-- **tokenized_gpt_labels_with_full_funcs.json** → Improved labels including **full functions + concept library tokens**, supporting richer supervision.  
+To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered three major architectural upgrades:
 
----
+### 1. Tokenization Rationale: Postfix + `<C>` (Task 1.1)
+The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants.
 
+* **The Upgrade:** I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses. Furthermore, I replaced all discrete floating-point numbers with a continuous `<C>` embedding token (xVal).
+* **Result:** The maximum sequence length dropped from 67 tokens to 48 tokens.
+* **Impact:** This structural compression nearly doubled the Exact Match accuracy from **25.7% (Baseline)** to **47.4% (Proposed)** on the test split.
 
+### 2. Next-Gen Generative Core: KAN vs. MLP (Task 2.6)
+To push the generative seeding capabilities further, I experimented with replacing the standard linear MLPs inside the Transformer blocks with Kolmogorov-Arnold Networks (KANs).
 
-## Setup Instructions
+* **The Experiment:** Located in `src/models/kan_mlp.py`, I benchmarked both layers.
+* **Result:** By using learnable B-splines on the edges instead of fixed linear node activations, the KAN converged significantly faster and achieved a lower MSE floor, proving its superiority for mapping continuous physical geometries.
 
-To run the pipeline **directly with the latest improvements**:
+### 3. Inference Upgrades: Beam Search & Exposure Bias (Task 2.6)
+To properly seed a generative Monte Carlo Tree Search (MCTS), a model must output Top-K candidate skeletons rather than a single greedy prediction.
 
-1.  **Clone the repository and navigate into the project directory:**
-    ```bash
-    git clone [https://github.com/krishoncloud/SYMBA.git](https://github.com/krishoncloud/SYMBA.git)
-    cd SYMBA/SYMBA_REG/SymbolicGPT_Krish_Malik
-    ```
-
-2.  **Run the decoder with improved embeddings and labels:**
-    ```bash
-    python src/decoder/sliding_window.py \
-      --embeddings src/embeddings/tnet_embeddings_new.json \
-      --labels src/labels/tokenized_gpt_labels_with_full_funcs.json
-    ```
+* **The Upgrade:** I upgraded the baseline decoder to utilize Beam Search (`src/models/updated_sliding_window.py`).
+* **Discovery:** Running this revealed severe **Exposure Bias** in the baseline models (collapsing to 0.00% exact match during beam search), proving that standard teacher-forcing is insufficient for generative seeding. This directly motivates my 2026 proposal to align the architecture using Group Relative Policy Optimization (GRPO).
 
 ---
 
-## Additional Information
+## Repository Navigation
 
-### Embeddings
-
-| File | Description | Best For |
-| :--- | :--- | :--- |
-| `tnet_embeddings_new.json` | New version with **local-focused features** to support sliding-window + sparse decoding. | **Best Performance** |
-| `tnet_embeddings.json` | Older version with global/dataset-wide features (useful for broader variation analysis). | Analysis |
-
-### Labels
-
-| File | Description | Best For |
-| :--- | :--- | :--- |
-| `tokenized_gpt_labels_with_full_funcs.json` | **Improved labels** with learned concept library integration. | **Best Performance** |
-| `tokenized_gpt_labels.json` | Baseline labels, without concept library. | Baseline comparison |
-
-**For best performance, use:**
-* **Embeddings:** `tnet_embeddings_new.json`
-* **Labels:** `tokenized_gpt_labels_with_full_funcs.json`
-* **Decoder:** `sliding_window.py`
-
----
-
-## Recent Additions
-
-- Improved embeddings (`tnet_embeddings_new.json`)
-- Improved labels with concept library (`tokenized_gpt_labels_with_full_funcs.json`)
-- Sliding-window sparse decoder (`sliding_window.py`)
-- Predictions output file (`predictions.json`)
-- Medium blog link (`docs/BLOG_LINK.md`)
-
----
-
-## Blog
-
-Read the detailed writeup here:
-[Learning Symbolic Expressions from Data Clouds](https://medium.com/@krishmalikus/learning-symbolic-expressions-from-data-clouds-d186f05435bd)
-
----
-
-## Credits
-
-ML4SCI / Symba Lab
-
-Developed during **Google Summer of Code (GSoC) 2025** by **@krishoncloud**
-
-Contributions include: restructuring repo, improved embeddings/labels, sliding window decoder, and documentation.
+* `src/baselines/`: The original 2024/2025 Prefix & Greedy decoding scripts used for benchmarking.
+* `src/models/`: **[My Contributions]** The updated Postfix Decoder, Beam Search logic, and KAN experiments.
+* `src/parser/`: **[My Contributions]** The custom Postfix AST and continuous token masking logic.
+* `src/embeddings/` & `src/labels/`: Custom continuous embeddings and newly generated Postfix JSON parse trees.
