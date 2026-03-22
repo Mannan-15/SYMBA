@@ -54,7 +54,7 @@ To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered 
 ### 1. Tokenization Rationale: Postfix + `<C>` (Task 1.1)
 The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants.
 
-* **The Upgrade:** I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses. Furthermore, I replaced all discrete floating-point numbers with a continuous `<C>` embedding token (xVal).
+* **The Upgrade:** I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and tokens. Furthermore, I replaced all discrete floating-point numbers with a continuous `<C>` embedding token (xVal).
 * **Result:** The maximum sequence length dropped from 67 tokens to 48 tokens.
 * **Impact:** This structural compression nearly doubled the Exact Match accuracy from **25.7% (Baseline)** to **47.4% (Proposed)** on the test split.
 
