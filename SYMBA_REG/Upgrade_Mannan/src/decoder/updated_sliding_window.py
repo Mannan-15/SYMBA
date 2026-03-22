@@ -200,35 +200,42 @@ for epoch in range(num_epochs):
     val_losses.append(avg_val_loss)
     val_accs.append(avg_val_acc)
     
-    scheduler.step(avg_val_loss)
-    
-    print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} | Val Loss: {avg_val_loss:.4f} || Train Acc: {avg_train_acc:.2f}% | Val Acc: {avg_val_acc:.2f}%")
+    ppl_train = math.exp(avg_train_loss)
+    ppl_val = math.exp(avg_val_loss)
 
+    scheduler.step(avg_val_loss)
+    print(f"Epoch {epoch+1:02d} | Train Loss: {avg_train_loss:.4f} (PPL: {ppl_train:.2f}) | Val Loss: {avg_val_loss:.4f} (PPL: {ppl_val:.2f}) || Train Acc: {avg_train_acc:.2f}% | Val Acc: {avg_val_acc:.2f}%")
+    
+# ==========================================
 # ==========================================
 # 6. Plot Loss and Accuracy on Dual Axes
 # ==========================================
-fig, ax1 = plt.subplots(figsize=(10, 5))
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 
 # Plot Loss on left Y-axis
-color = 'tab:red'
+color1 = 'tab:red'
 ax1.set_xlabel('Epoch')
-ax1.set_ylabel('Cross-Entropy Loss', color=color)
+ax1.set_ylabel('Cross-Entropy Loss', color=color1)
 ax1.plot(train_losses, label="Train Loss", color='red', linestyle='dashed')
 ax1.plot(val_losses, label="Validation Loss", color='darkred', linewidth=2)
-ax1.tick_params(axis='y', labelcolor=color)
-ax1.grid(alpha=0.3)
+ax1.tick_params(axis='y', labelcolor=color1)
+ax1.grid(True, alpha=0.3)
+ax1.set_title("Model Loss")
+ax1.legend(loc="upper right")
 
-# Plot Accuracy on right Y-axis
-ax2 = ax1.twinx()  
-color = 'tab:blue'
-ax2.set_ylabel('Token Accuracy (%)', color=color)  
+# --- Plot 2: Accuracy (Right Subplot) ---
+color2 = 'tab:blue'
+ax2.set_xlabel('Epoch')
+ax2.set_ylabel('Token Accuracy (%)', color=color2)  
 ax2.plot(train_accs, label="Train Accuracy", color='dodgerblue', linestyle='dashed')
 ax2.plot(val_accs, label="Validation Accuracy", color='blue', linewidth=2)
-ax2.tick_params(axis='y', labelcolor=color)
+ax2.tick_params(axis='y', labelcolor=color2)
+ax2.grid(True, alpha=0.3)
+ax2.set_title("Next-Token Accuracy")
+ax2.legend(loc="lower right")
 
 fig.tight_layout()  
-plt.title("Training Loss vs. Next-Token Accuracy")
-fig.legend(loc="center right", bbox_to_anchor=(0.9, 0.5))
+fig.suptitle("Training Loss vs. Next-Token Accuracy")
 plt.show()
 
 torch.save(model.state_dict(), "symbolic_gpt_decoder_sparse_regularized.pth")
