@@ -5,7 +5,6 @@ import sympy
 from sympy.parsing.sympy_parser import parse_expr
 from tqdm import tqdm
 
-# Safely resolve paths relative to where this script is located (the data/ folder)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 INPUT_JSON = os.path.join(SCRIPT_DIR, "feynman_parse_trees.json")
 OUTPUT_JSON = os.path.join(SCRIPT_DIR, "data_clouds.json")
