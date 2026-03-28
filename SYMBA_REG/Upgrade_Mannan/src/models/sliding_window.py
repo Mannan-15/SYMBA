@@ -429,8 +429,8 @@ with torch.no_grad():
 accuracy = (exact_matches / total_samples) * 100
 
 print("========================================")
-print(f"✅ Inference Complete!")
-print(f"🎯 EXACT MATCH ACCURACY: {accuracy:.2f}% ({exact_matches}/{total_samples} perfect equations)")
+print(f"Inference Complete!")
+print(f"EXACT MATCH ACCURACY: {accuracy:.2f}% ({exact_matches}/{total_samples} perfect equations)")
 print("========================================")
 
 # -----------------------------
@@ -439,4 +439,4 @@ print("========================================")
 with open("./data/predictions.json", "w") as f:
     json.dump(predictions, f, indent=2)
 
-print("✅ Predictions saved to predictions.json")
+print("Predictions saved to predictions.json")
