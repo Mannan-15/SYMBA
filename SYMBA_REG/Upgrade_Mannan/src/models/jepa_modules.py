@@ -1,7 +1,5 @@
 import torch
 import torch.nn as nn
-
-# Importing exactly how you have it in your existing script
 from efficient_kan import KAN 
 
 class LatentPredictor(nn.Module):
@@ -28,8 +26,6 @@ class JEPA_PhysicsEncoder(nn.Module):
     """
     def __init__(self, tnet_dim=128, hidden_dim=64, latent_dim=64):
         super().__init__()
-        # Instead of stacking individual KANLayers, we pass the 
-        # full architecture list to efficient_kan: [128 -> 64 -> 64]
         self.projector = KAN([tnet_dim, hidden_dim, latent_dim])
 
     def forward(self, tnet_emb):
@@ -38,7 +34,7 @@ class JEPA_PhysicsEncoder(nn.Module):
 class JEPA_MathEncoder(nn.Module):
     """
     Takes tokenized Postfix equations (y) and maps them into 
-    the exact same Joint Latent Space.
+    the exact same Joint Latent Space (s_y).
     """
     def __init__(self, vocab_size=100, embed_dim=32, hidden_dim=64, latent_dim=64):
         super().__init__()
@@ -60,3 +56,4 @@ class JEPA_MathEncoder(nn.Module):
         # Squeeze the layer dimension and pass through KAN
         latent_math = self.projector(hidden.squeeze(0)) 
         return latent_math
+    

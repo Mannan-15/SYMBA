@@ -3,10 +3,10 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 
-# Import the new JEPA modules
+# Importing the JEPA modules
 from models.jepa_modules import JEPA_PhysicsEncoder, JEPA_MathEncoder, LatentPredictor
 
-# 1. Dataset Loader for your JSON files
+# 1. Dataset Loader
 class JEPADataset(Dataset):
     def __init__(self, tnet_json_path, postfix_json_path):
         print(f"Loading T-Net embeddings from: {tnet_json_path}")
@@ -18,8 +18,7 @@ class JEPADataset(Dataset):
             with open(postfix_json_path, 'r') as f:
                 self.postfix_data = json.load(f)
                 
-            # Convert to tensors (Assuming they are lists of numbers/arrays)
-            # Adjust these keys/indexing based on your exact JSON structure!
+            # Convert to tensors
             self.x_tensors = torch.tensor(self.tnet_data, dtype=torch.float32)
             self.y_tensors = torch.tensor(self.postfix_data, dtype=torch.long)
             self.valid = True
@@ -28,7 +27,6 @@ class JEPADataset(Dataset):
         except Exception as e:
             print(f"JSON Structure mismatch or file not found. Error: {e}")
             print("Falling back to simulated data for PoC demonstration...")
-            # Fallback so the PoC always runs and you get your terminal output
             self.x_tensors = torch.randn(100, 128) # Simulated 128D T-Net embeddings
             self.y_tensors = torch.randint(1, 50, (100, 15)) # Simulated Postfix sequences
             self.valid = False
@@ -57,14 +55,13 @@ def vicreg_loss(s_x, s_y, var_weight=1.0, inv_weight=1.0, gamma=1.0):
 
 # 3. The Main Training Loop
 def run_jepa_poc():
-    # File paths based on your repository structure
-    TNET_PATH = "embeddings/tnet_embeddings_my.json"
-    POSTFIX_PATH = "labels/tokenized_gpt_labels_postfix.json"
+    TNET_PATH = "./src/embeddings/tnet_embeddings_my.json"
+    POSTFIX_PATH = "./src/labels/tokenized_gpt_labels_postfix.json"
     
     dataset = JEPADataset(TNET_PATH, POSTFIX_PATH)
     dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
     
-    # Initialize the JEPA + KAN models
+    # JEPA + KAN models
     physics_encoder = JEPA_PhysicsEncoder(tnet_dim=128, latent_dim=64)
     math_encoder = JEPA_MathEncoder(vocab_size=100, latent_dim=64)
     predictor = LatentPredictor(latent_dim=64)
@@ -78,8 +75,8 @@ def run_jepa_poc():
     )
     
     print("\n--- Starting LM-JEPA Cross-Modal Alignment ---")
-    
-    for epoch in range(1, 101): # Running 100 epochs for the PoC
+    n_epochs = 100
+    for epoch in range(n_epochs):
         total_epoch_loss = 0
         total_inv = 0
         total_var = 0
@@ -88,9 +85,6 @@ def run_jepa_poc():
         for batch_x, batch_y in dataloader:
             optimizer.zero_grad()
             
-            # 1. Forward Pass
-            s_x = physics_encoder(batch_x)
-            s_y = math_encoder(batch_y)
             # 1. Encoders generate latent representations
             s_x = physics_encoder(batch_x) # Context
             s_y = math_encoder(batch_y) # Target
@@ -104,16 +98,15 @@ def run_jepa_poc():
             total_epoch_loss += loss.item()
             total_inv += inv
             total_var += var
-            # Calculate Cosine Similarity for logging
+            # Cosine Similarity
             cos_sim += F.cosine_similarity(s_pred, s_y).mean().item()
             
-        # Print metrics every 10 epochs
-        if epoch % 10 == 0:
+        if (epoch+1) % 10 == 0:
             avg_loss = total_epoch_loss / len(dataloader)
             avg_inv = total_inv / len(dataloader)
             avg_var = total_var / len(dataloader)
             avg_cos = cos_sim / len(dataloader)
-            print(f"Epoch {epoch:03d} | Loss: {avg_loss:.4f} | MSE: {avg_inv:.4f} | Var: {avg_var:.4f} | Cosine Sim: {avg_cos:.4f}")
+            print(f"Epoch {epoch+1:03d} | Loss: {avg_loss:.4f} | MSE: {avg_inv:.4f} | Var: {avg_var:.4f} | Cosine Sim: {avg_cos:.4f}")
 
 if __name__ == "__main__":
     run_jepa_poc()
