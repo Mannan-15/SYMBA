@@ -273,7 +273,7 @@ if unparseable_equations:
     for row, formula, error in unparseable_equations:
         print(f"[Row {row}] {formula} → Error: {error}")
 else:
-    print(f"🎉 All {total_equations_processed} equations parsed successfully!")
+    print(f"All {total_equations_processed} equations parsed successfully!")
 
 # STEP 5: PRINT SUCCEEDING FORMULAS SIDE-BY-SIDE
 print(f"\n Showing all successfully parsed expressions:\n")
