@@ -60,14 +60,14 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 
 <hr>
 
-<h2>Key Experiments &amp; Architectural Updates</h2>
+<h2>Key Experiments &amp; Architectural Updates</h2><b>(for more details, check the proposal's section 2)</b>
 <p>To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered three major architectural upgrades:</p>
 
 <h3>1. Tokenization Rationale: Postfix + <code>&lt;C&gt;</code> (Task 1.1)</h3>
 <p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants.</p>
 <ul>
   <li><strong>The Upgrade:</strong> I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and tokens. Furthermore, I replaced all discrete floating-point numbers with a continuous <code>&lt;C&gt;</code> embedding token (xVal).</li>
-  <li><strong>Result:</strong> The maximum sequence length dropped from 67 tokens to 48 tokens.</li>
+  <li><strong>Result:</strong> The maximum sequence length (vocab size) dropped from 67 tokens to 48 tokens.</li>
   <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline)</strong> to <strong>47.4% (Proposed)</strong> on the test split.</li>
 </ul>
 
