@@ -131,7 +131,7 @@ def run_jepa_poc():
     # ===========================
     sns.set_theme(style="whitegrid", context="paper", font_scale=1.2)
     fig = plt.figure(figsize=(16, 10))
-    fig.suptitle("LM-JEPA Task 2.7: Cross-Modal Predictive Alignment (Physics → Math)", fontsize=18, fontweight='bold', y=0.98)
+    fig.suptitle("LM-JEPA Task 2.7: Metrics", fontsize=18, fontweight='bold', y=0.98)
 
     # Plot 1: Total VICReg Loss
     plt.subplot(2, 3, 1)
