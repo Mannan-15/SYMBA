@@ -149,7 +149,7 @@ train_accs, val_accs = [], []
 
 num_epochs = 50
 
-print(f"🚀 Starting Training for {num_epochs} epochs on {device}...")
+print(f"Starting Training for {num_epochs} epochs on {device}...")
 
 for epoch in range(num_epochs):
     model.train()
@@ -345,7 +345,7 @@ for idx, batch in enumerate(val_loader):
     })
 
 accuracy = (exact_matches / total_samples) * 100
-print(f"🎯 EXACT MATCH: {accuracy:.2f}% ({exact_matches}/{total_samples})")
+print(f"EXACT MATCH: {accuracy:.2f}% ({exact_matches}/{total_samples})")
 
 failures = [p for p in predictions if not p["exact_match"]]
 print(f"\n❌ Sample Failures ({len(failures)} total):")
