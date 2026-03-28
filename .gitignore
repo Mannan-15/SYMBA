@@ -52,4 +52,4 @@ __pycache__/
 
 .ipynb_checkpoints
 
-*.checkpoints/
+src/checkpoints/
