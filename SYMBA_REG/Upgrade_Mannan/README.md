@@ -47,14 +47,22 @@
 <pre><code>git clone -b Mannan-upgrade --single-branch https://github.com/Mannan-15/SYMBA.git
 cd ./SYMBA_REG/Upgrade_Mannan</code></pre>
 
-<p><strong>2. Run the Proposed Postfix Decoder (Standard Inference):</strong></p>
+<p><strong>2. Parse the AI Feynman Dataset (Task 1.1):</strong><br>
+First, execute the symbolic parser to convert the raw equations into mathematically compressed Postfix JSON parse trees:</p>
+<pre><code>python3 src/parser/symbolic_parser.py</code></pre>
+
+<p><strong>3. Build the Postfix Vocabulary (Task 1.1):</strong><br>
+Next, generate the continuous <code>&lt;C&gt;</code> token mappings and the final vocabulary file required by the encoders:</p>
+<pre><code>python3 src/models/vocab_builder_postfix.py</code></pre>
+
+<p><strong>4. Run the Proposed Postfix Decoder (Standard Inference):</strong></p>
 <pre><code>python3 src/models/sliding_window.py</code></pre>
 
-<p><strong>3. Run the Beam Search Inference (Generative Seeding):</strong><br>
+<p><strong>5. Run the Beam Search Inference (Generative Seeding):</strong><br>
 To run the Top-K beam search decoder used to uncover exposure bias and seed the MCTS:</p>
 <pre><code>python3 src/models/updated_sliding_window.py</code></pre>
 
-<p><strong>4. Run the Legacy Prefix Baseline (For Comparison):</strong><br>
+<p><strong>6. Run the Legacy Prefix Baseline (For Comparison):</strong><br>
 To run the original 2024/2025 baseline model and observe the sequence bloat and baseline accuracy:</p>
 <pre><code>python3 src/baselines/old_sliding_window.py</code></pre>
 
