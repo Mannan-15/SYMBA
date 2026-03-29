@@ -43,8 +43,8 @@
 <h2>How to Run the Models</h2>
 <p>To replicate my experiments and run the proposed architectures locally, follow these steps:</p>
 
-<p><strong>1. Clone the repository, checkout the branch named Mannan-upgrade and navigate to the upgrade directory:</strong></p>
-<pre><code>git clone https://github.com/Mannan-15/SYMBA.git
+<p><strong>1. Clone the repository and navigate to the upgrade directory:</strong></p>
+<pre><code>git clone -b Mannan-upgrade --single-branch https://github.com/Mannan-15/SYMBA.git
 cd ./SYMBA_REG/Upgrade_Mannan</code></pre>
 
 <p><strong>2. Run the Proposed Postfix Decoder (Standard Inference):</strong></p>
