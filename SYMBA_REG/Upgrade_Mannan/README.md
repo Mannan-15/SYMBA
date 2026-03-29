@@ -62,7 +62,11 @@ Next, generate the continuous <code>&lt;C&gt;</code> token mappings and the fina
 To run the Top-K beam search decoder used to uncover exposure bias and seed the MCTS:</p>
 <pre><code>python3 src/models/updated_sliding_window.py</code></pre>
 
-<p><strong>6. Run the Legacy Prefix Baseline (For Comparison):</strong><br>
+<p><strong>6. Run the KAN vs. MLP Experiment:</strong><br>
+Benchmarks the Kolmogorov-Arnold Network against standard linear MLPs for physical geometries:</p>
+<pre><code>python3 src/models/kan_mlp.py</code></pre>
+
+<p><strong>7. Run the Legacy Prefix Baseline (For Comparison):</strong><br>
 To run the original 2024/2025 baseline model and observe the sequence bloat and baseline accuracy:</p>
 <pre><code>python3 src/baselines/old_sliding_window.py</code></pre>
 
