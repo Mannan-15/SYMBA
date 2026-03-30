@@ -1,6 +1,6 @@
 <h1 align="center">Symba 2026: LM-JEPA for Symbolic Regression</h1>
 
-<p align="center"><strong>Read the Full GSoC 2026 Proposal:</strong> <a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">LM-JEPA Proposal (Google Docs)</a></p>
+<p align="center"><strong>Read the Full GSoC 2026 Proposal:</strong></p>
 
 <p>This codebase contains the Proof of Concept (PoC) experiments, continuous tokenization pipeline, and Joint-Embedding architectures designed for my GSoC 2026 proposal.</p>
 
