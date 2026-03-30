@@ -4,7 +4,7 @@
 
 <div align="center">
 <p><em><strong>Note on Parallel Submission:</strong> While this repository branch focuses on search-augmented text generation (Task 2.6), I have also architected and submitted a highly synergistic parallel proposal for <strong>LM-JEPA for Symbolic Regression</strong>(Task 2.7). That proposal abandons text generation entirely in favor of continuous latent-space prediction.<br>
-<a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">Read my LM-JEPA Proposal Here</a> | <a href="[https://github.com/Mannan-15/SYMBA/tree/LM-JEPA](https://github.com/Mannan-15/SYMBA/tree/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan)">View the LM-JEPA Code Branch</a></em></p>
+<a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">Read my LM-JEPA Proposal Here</a> | <a href="https://github.com/Mannan-15/SYMBA/tree/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan">View the LM-JEPA Code Branch</a></em></p>
 </div>
 <hr>
 
