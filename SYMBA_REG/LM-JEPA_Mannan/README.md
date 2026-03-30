@@ -1,6 +1,13 @@
 <h1 align="center">Symba 2026: LM-JEPA for Symbolic Regression</h1>
 
-<p align="center"><strong>Read the Full GSoC 2026 Proposal: <a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">LM-JEPA Proposal (Google Docs)</a></strong></p>
+<p align="center"><strong><h4 align="center">Read the Full GSoC 2026 Proposal: <a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">LM-JEPA Proposal (Google Docs)</a></strong></p></h4>
+
+<div align="center">
+  <p><em><h5><strong>Note on Parallel Submission:</strong> While this repository branch focuses on continuous latent-space prediction via LM-JEPA (Task 2.7), I have also architected and submitted a highly synergistic parallel proposal for <strong>Using Next-Gen Transformers to Seed Generative Models for Symbolic Regression </strong>(Task 2.6). That proposal focuses on search-augmented text generation using Next-Gen Transformers and generative algorithms (like GP, MCTS, KANs).<br></h5>
+<a href="https://docs.google.com/document/d/1WaaLbe_9OeSylVhjENV5TdaDmsZNnZ357YENC6tNcUw/edit?usp=sharing">Read my Next-Gen Transformers Proposal Here</a> | <a href="https://github.com/Mannan-15/SYMBA/tree/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan">View the Next-Gen Code Branch</a></em></p>
+</div>
+
+<hr>
 
 <p>This codebase contains the Proof of Concept (PoC) experiments, continuous tokenization pipeline, and Joint-Embedding architectures designed for my GSoC 2026 proposal.</p>
 
