@@ -2,7 +2,13 @@
 
 <p><strong>Read the Full GSoC 2026 Proposal:</strong> <a href="https://docs.google.com/document/d/1WaaLbe_9OeSylVhjENV5TdaDmsZNnZ357YENC6tNcUw/edit?usp=sharing">Symba 2026 Proposal (Google Docs)</a></p>
 
-<p>Welcome to my experimental repository for the ML4SCI Symba project. This codebase contains the Proof of Concept (PoC) experiments and architectural upgrades designed for my GSoC 2026 proposal.</p>
+<div align="center">
+<p><em><strong>Note on Parallel Submission:</strong> While this repository branch focuses on search-augmented text generation (Task 2.6), I have also architected and submitted a highly synergistic parallel proposal for <strong>LM-JEPA for Symbolic Regression</strong>(Task 2.7). That proposal abandons text generation entirely in favor of continuous latent-space prediction.<br>
+<a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">Read my LM-JEPA Proposal Here</a> | <a href="https://github.com/Mannan-15/SYMBA/tree/LM-JEPA">View the LM-JEPA Code Branch</a></em></p>
+</div>
+<hr>
+
+<p>This codebase contains the Proof of Concept (PoC) experiments and architectural upgrades designed for my GSoC 2026 proposal.</p>
 
 <p>This repository directly addresses the following ML4SCI Common Tasks:</p>
 
