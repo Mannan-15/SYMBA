@@ -80,7 +80,7 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 
 <h2>Key Experiments &amp; Architectural Updates</h2>
 <p><b>(For deep technical proofs and loss landscape graphs, please refer to Section 2 of the proposal)</b></p>
-<p>To fulfill these tasks, I audited the 2025's Krish Malik's proposal and engineered three major architectural upgrades. Below is the proposed end-to-end generative pipeline:</p>
+<p>To fulfill these tasks, I audited the 2025's Krish Malik's proposal and engineered three major architectural upgrades. Below is the end-to-end generative pipeline implemented for task:</p>
 <p align="center">
 <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/next_gen_architecture.png" height="750" width="550" />
 </p>
