@@ -84,6 +84,7 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 <h3>1. Tokenization Rationale: Postfix + <code>&lt;C&gt;</code> (Task 1.1)</h3>
 <p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants.</p>
 <ul>
+  <li><strong>Data Encoding (T-Net):</strong> I integrated and retained the T-Net encoder for the physical tabular data <code>(x)</code>. Its permutation-invariant architecture is mathematically required to handle unordered sets of physical observations without injecting artificial sequence biases.</li>
   <li><strong>The Upgrade:</strong> I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and tokens. Furthermore, I replaced all discrete floating-point numbers with a continuous <code>&lt;C&gt;</code> embedding token (xVal).</li>
   <li><strong>Result:</strong> The maximum sequence length (vocab size) dropped from 67 tokens to 48 tokens.</li>
   <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline (2025's proposal) using Prefix + <code>&lt;C&gt;</code>)</strong> to <strong>47.4% (Proposed)</strong> on the test split. It also demonstrates superior true
