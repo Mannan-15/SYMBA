@@ -96,6 +96,14 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><strong>Beam Search &amp; Exposure Bias:</strong> I implemented a Top-K Beam Search inference script to test the generative capabilities. Testing revealed severe <strong>Exposure Bias</strong> in the baseline models (collapsing to 0.00% exact match during autoregressive rollout). This proved that standard teacher-forcing is highly brittle for math, directly motivating my shift to a JEPA continuous-space architecture.</li>
   <li><strong>Impact:</strong> The maximum sequence length dropped from 67 tokens down to 48. This structural compression nearly doubled the greedy Exact Match accuracy from <strong>25.7% (Baseline)</strong> to <strong>47.4% (Proposed)</strong> on my PoC test split.</li>
 </ul>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+</p>
+<p align="center">
+  <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code> Tokenization
+</p>
 
 <h3>2. The LM-JEPA Core, Architecture, &amp; VICReg (Task 2.7)</h3>
 <p>A standard L2 prediction loss in a Joint-Embedding environment causes both networks to instantly collapse and output vectors of all zeros. To prevent this, I engineered a stabilized continuous-space pipeline.</p>
@@ -105,6 +113,9 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><strong>Metrics &amp; Evaluation:</strong> I benchmarked the pre-training loop using a comprehensive suite of metrics: L2 MSE (Prediction Loss), total VICReg Loss, Variance Penalty, Latent Cosine Similarity, and Kernel Density Estimation (KDE) distributions.</li>
   <li><strong>Result:</strong> The PoC training dynamics confirm the architecture maps continuous physical data to discrete mathematical structures without collapsing. The <strong>Variance Penalty</strong> flatlined at 0.000, the <strong>Latent Cosine Similarity</strong> aligned to a perfect 1.000, and the KDE plots verify a dense, decorrelated distribution of latent concepts.</li>
 </ul>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/jepa_alignments_result.png" height="500" width="900" />
+</p>
 
 <h3>3. Next-Gen Feature Encoders: KAN vs. MLP</h3>
 <p>To push the physical mapping capabilities further, I experimented with replacing the standard linear MLPs inside the Transformer blocks with Kolmogorov-Arnold Networks (KANs).</p>
@@ -112,6 +123,9 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><strong>The Experiment:</strong> Located in <code>src/models/kan_mlp.py</code>, I benchmarked both layers on a noisy, non-linear dataset.</li>
   <li><strong>Result:</strong> By using learnable B-splines on the edges instead of fixed linear node activations, the KAN converged significantly faster and achieved a lower MSE floor, proving its superiority for the upcoming Phase 1 scaling of LM-JEPA.</li>
 </ul>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/kan_mlp.png" height="350" />
+</p>
 
 <hr>
 
