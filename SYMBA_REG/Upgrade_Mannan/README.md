@@ -86,8 +86,9 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 <ul>
   <li><strong>The Upgrade:</strong> I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and tokens. Furthermore, I replaced all discrete floating-point numbers with a continuous <code>&lt;C&gt;</code> embedding token (xVal).</li>
   <li><strong>Result:</strong> The maximum sequence length (vocab size) dropped from 67 tokens to 48 tokens.</li>
-  <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline)</strong> to <strong>47.4% (Proposed)</strong> on the test split.</li>
+  <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline (2025's proposal) using Prefix + <code>&lt;C&gt;</code>)</strong> to <strong>47.4% (Proposed)</strong> on the test split.</li>
 </ul>
+![]("C:\Users\Mannan Golchha\OneDrive\Pictures\Screenshots\Screenshot 2026-03-20 195206.png")
 
 <h3>2. Next-Gen Generative Core: KAN vs. MLP (Task 2.6)</h3>
 <p>To push the generative seeding capabilities further, I experimented with replacing the standard linear MLPs inside the Transformer blocks with Kolmogorov-Arnold Networks (KANs).</p>
