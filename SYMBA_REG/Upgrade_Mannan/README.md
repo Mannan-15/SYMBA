@@ -39,9 +39,9 @@
 <p>All architectural experiments and model scripts are located in the <code>src/models/</code> directory.<br>
 <em>(Note: Any file with "old" in the name, such as <code>old_sliding_window.py</code>, refers to the previous 2024/2025 baseline from Krish Malik's proposal and is included purely for benchmarking comparisons).</em></p>
 <ul>
-  <li><code>sliding_window.py</code>: The proposed upgraded model utilizing TNet embeddings, continuous <code>&lt;C&gt;</code> tokenization, and Postfix encoding.</li>
-  <li><code>updated_sliding_window.py</code>: The proposed model equipped with Beam Search inference to output Top-K candidate skeletons.</li>
-  <li><code>kan_mlp.py</code>: The isolated experiment benchmarking Kolmogorov-Arnold Networks (KAN) against standard MLPs for the Transformer blocks.</li>
+  <li><code>sliding_window.py</code>: The proposed upgraded model utilizing TNet embeddings, continuous <code>&lt;C&gt;</code> tokenization, and Postfix encoding. (<a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/models/sliding_window.py">src/models/sliding_window.py</a>)</li>
+  <li><code>updated_sliding_window.py</code>: The proposed model equipped with Beam Search inference to output Top-K candidate skeletons. (<a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/models/updated_sliding_window.py">src/models/updated_sliding_window.py</a>)</li>
+  <li><code>kan_mlp.py</code>: The isolated experiment benchmarking Kolmogorov-Arnold Networks (KAN) against standard MLPs for the Transformer blocks. (<a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/models/kan_mlp.py">src/models/kan_mlp.py</a>)</li>
 </ul>
 
 <hr>
@@ -132,8 +132,8 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 
 <h2>Repository Navigation</h2>
 <ul>
-  <li><code>src/baselines/</code>: The original 2024/2025 Prefix &amp; Greedy decoding scripts used for benchmarking.</li>
-  <li><code>src/models/</code>: <strong>[My Contributions]</strong> The updated Postfix Decoder, Beam Search logic, and KAN experiments.</li>
-  <li><code>src/parser/</code>: <strong>[My Contributions]</strong> The custom Postfix AST and continuous token masking logic.</li>
+  <li><code>src/baselines/</code>: The original 2025 Prefix + <code>&lt;C&gt;</code> &amp; Greedy decoding scripts used for benchmarking.</li>
+  <li><code>src/models/</code>: The updated Postfix Decoder, Beam Search logic, and KAN experiments.</li>
+  <li><code>src/parser/</code>: The custom Postfix AST and continuous token masking logic.</li>
   <li><code>src/embeddings/</code> &amp; <code>src/labels/</code>: Custom continuous embeddings and newly generated Postfix JSON parse trees.</li>
 </ul>
