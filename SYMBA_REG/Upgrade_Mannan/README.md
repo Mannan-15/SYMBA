@@ -91,7 +91,10 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 <li><strong>Compute Reinvestment (The "Headroom" Advantage):</strong> The tokenizer completely strips structural bloat, dropping the maximum sequence length from 67 down to 49 tokens (~30% compression). This drastically reduces both the Transformer's <code>O(N^2)</code> self-attention compute cost and the MCTS search tree <code>O(b^D)</code>, buying back structural headroom to learn complex physics for "free."</li>
 <li><strong>Impact:</strong> Because Postfix removes redundant tokens (like closing brackets) that trivially inflate training metrics, it demonstrates vastly superior true generalization. The proposed pipeline nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline Prefix) to 47.4% (Proposed Postfix)</strong>, while improving Validation Accuracy from <strong>52.1% to 56.3%</strong>.</li>
 </ul>
-
+<p align="center">
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+</p>
 <p align="center">
 <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
 <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/postfix_parse.png" width="45%" />
