@@ -87,13 +87,18 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 <p>To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered three major architectural upgrades to shift Symba from <em>syntactic text generation</em> to <em>semantic physics prediction</em>. <b>(For deep technical proofs and loss landscape graphs, please refer to Section 2 of the proposal)</b>.</p>
 
 <h3>1. Tokenization Rationale, T-Net, &amp; Inference Upgrades (Task 1.1)</h3>
-<p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, causing massive sequence lengths and severe hallucination of physical constants.</p>
+<p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants. To fix this, I engineered a mathematically enforced <strong>Postfix + <code>&lt;C&gt;</code> Tokenizer</strong>.</p>
 <ul>
+  <li><strong>Data Encoding (T-Net):</strong> I integrated the T-Net encoder for the physical tabular data <code>(x)</code>. Its permutation-invariant architecture handles unordered sets of physical observations without injecting artificial sequence biases.</li>
   <li><strong>Postfix vs. Prefix + <code>&lt;C&gt;</code> Tokenization:</strong> I engineered a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and replaces discrete floating-point numbers with a continuous embedding token.</li>
-  <li><strong>Beam Search &amp; Exposure Bias:</strong> I implemented a Top-K Beam Search inference script to test generative capabilities. Testing revealed severe <strong>Exposure Bias</strong> in baseline models, directly motivating my shift to a JEPA continuous-space architecture.</li>
   <li><strong>Compute Reinvestment:</strong> The maximum sequence length dropped from 67 tokens down to 48. This ~30% compression drastically reduces the <code>O(N^2)</code> self-attention compute cost, buying back architectural headroom to learn deeper physics.</li>
   <li><strong>Impact:</strong> The maximum sequence length dropped from 67 tokens down to 48. Because Postfix removes redundant tokens that artificially inflate training metrics, it forces the model to learn true mathematical generalization. This structural compression improved <strong>Validation Accuracy from 52.1% to 56.3%</strong> and nearly doubled the greedy <strong>Exact Match accuracy from 25.7% (Baseline) to 47.4% (Proposed)</strong>.</li>
 </ul>
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+</p>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
