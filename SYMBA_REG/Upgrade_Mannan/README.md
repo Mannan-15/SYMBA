@@ -73,48 +73,56 @@ Benchmarks the Kolmogorov-Arnold Network against standard linear MLPs for physic
 <pre><code>python3 src/models/kan_mlp.py</code></pre>
 
 <p><strong>7. Run the Legacy Prefix Baseline (For Comparison):</strong><br>
-To run the original 2024/2025 baseline model and observe the sequence bloat and baseline accuracy:</p>
+To run the original 2025's baseline model and observe the sequence bloat and baseline accuracy:</p>
 <pre><code>python3 src/baselines/old_sliding_window.py</code></pre>
 
 <hr>
 
-<h2>Key Experiments &amp; Architectural Updates</h2><b>(for more details, check the proposal's section 2)</b>
-<p>To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered three major architectural upgrades:</p>
-
-<h3>1. Tokenization Rationale: Postfix + <code>&lt;C&gt;</code> (Task 1.1)</h3>
-<p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants.</p>
-<ul>
-  <li><strong>Data Encoding (T-Net):</strong> I integrated and retained the T-Net encoder for the physical tabular data <code>(x)</code>. Its permutation-invariant architecture is mathematically required to handle unordered sets of physical observations without injecting artificial sequence biases.</li>
-  <li><strong>The Upgrade:</strong> I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and tokens. Furthermore, I replaced all discrete floating-point numbers with a continuous <code>&lt;C&gt;</code> embedding token (xVal).</li>
-  <li><strong>Result:</strong> The maximum sequence length (vocab size) dropped from 67 tokens to 48 tokens.</li>
-  <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline (2025's proposal) using Prefix + <code>&lt;C&gt;</code>)</strong> to <strong>47.4% (Proposed)</strong> on the test split. It also demonstrates superior true
-generalization, achieving a better validation accuracy <strong>(56.3% vs 52.1%)</strong>, proving it effectively learns the physics rather than just
-memorizing syntax.</li>
-</ul>
+<h2>Key Experiments &amp; Architectural Updates</h2>
+<p><b>(For deep technical proofs and loss landscape graphs, please refer to Section 2 of the proposal)</b></p>
+<p>To fulfill these tasks, I audited the 2025's Krish Malik's proposal and engineered three major architectural upgrades. Below is the proposed end-to-end generative pipeline:</p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/next_gen_architecture.png" height="750" width="550" />
+</p>
+<h3>1. Tokenization Rationale: Postfix + <code>&lt;C&gt;</code> (Task 1.1)</h3>
+<p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants. To fix this, I engineered a mathematically enforced <strong>Postfix + <code>&lt;C&gt;</code> Tokenizer</strong>.</p>
+<ul>
+<li><strong>Data Encoding (T-Net):</strong> I integrated the T-Net encoder for the physical tabular data <code>(x)</code>. Its permutation-invariant architecture handles unordered sets of physical observations without injecting artificial sequence biases.</li>
+<li><strong>Compute Reinvestment (The "Headroom" Advantage):</strong> The tokenizer completely strips structural bloat, dropping the maximum sequence length from 67 down to 49 tokens (~30% compression). This drastically reduces both the Transformer's <code>O(N^2)</code> self-attention compute cost and the MCTS search tree <code>O(b^D)</code>, buying back structural headroom to learn complex physics for "free."</li>
+<li><strong>Impact:</strong> Because Postfix removes redundant tokens (like closing brackets) that trivially inflate training metrics, it demonstrates vastly superior true generalization. The proposed pipeline nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline Prefix) to 47.4% (Proposed Postfix)</strong>, while improving Validation Accuracy from <strong>52.1% to 56.3%</strong>.</li>
+</ul>
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/postfix_parse.png" width="45%" />
 </p>
 <p align="center">
-  <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code> Tokenization
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/postfix_data.png" height="350" width="49%" />
+</p>
+<p align="center">
+<b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code>
 </p>
 
 <h3>2. Next-Gen Generative Core: KAN vs. MLP (Task 2.6)</h3>
-<p>To push the generative seeding capabilities further, I experimented with replacing the standard linear MLPs inside the Transformer blocks with Kolmogorov-Arnold Networks (KANs).</p>
+<p>To upgrade the Transformer blocks, I experimented with replacing standard feed-forward MLPs with Kolmogorov-Arnold Networks (KANs), testing them on a noisy physical dataset <code>(y = e^(-0.1x) * sin(3x) + noise)</code>.</p>
 <ul>
-  <li><strong>The Experiment:</strong> Located in <code>src/models/kan_mlp.py</code>, I benchmarked both layers.</li>
-  <li><strong>Result:</strong> By using learnable B-splines on the edges instead of fixed linear node activations, the KAN converged significantly faster and achieved a lower MSE floor, proving its superiority for mapping continuous physical geometries.</li>
+<li><strong>Result:</strong> By replacing static node activations with learnable, continuous B-spline functions on the edges, the KAN natively maps to physical geometries drastically better than linear weights. The KAN converged significantly faster and achieved a much lower ultimate MSE floor.</li>
 </ul>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/kan_mlp.png" height="350" />
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/kan_mlp.png" height="350" />
 </p>
+
 <h3>3. Inference Upgrades: Beam Search &amp; Exposure Bias (Task 2.6)</h3>
 <p>To properly seed a generative Monte Carlo Tree Search (MCTS), a model must output Top-K candidate skeletons rather than a single greedy prediction.</p>
 <ul>
-  <li><strong>The Upgrade:</strong> I upgraded the baseline decoder to utilize Beam Search (<code>src/models/updated_sliding_window.py</code>).</li>
-  <li><strong>Discovery:</strong> Running this revealed severe <strong>Exposure Bias</strong> in the baseline models (collapsing to 0.00% exact match during beam search), proving that standard teacher-forcing is insufficient for generative seeding. This directly motivates my 2026 proposal to align the architecture using Group Relative Policy Optimization (GRPO).</li>
+<li><strong>Discovery:</strong> Upgrading the baseline decoder to utilize Beam Search (<code>src/models/updated_sliding_window.py</code>) caused the model to collapse, yielding a <strong>0.00% Exact Match</strong> across test samples.</li>
+<li><strong>Diagnosis:</strong> This revealed severe <strong>Exposure Bias</strong>. Because the baseline is trained purely with teacher forcing, it never learns to recover from its own autoregressive mistakes during inference. This proves standard next-token prediction is insufficient for generative seeding, directly necessitating the <strong>GRPO Alignment Loop</strong> proposed in Section 3 of my formal proposal.</li>
 </ul>
+<p align="center">
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/beam_search_stats.png" height="350" width="550" />
+</p>
 
 <hr>
 
