@@ -86,9 +86,18 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 <ul>
   <li><strong>The Upgrade:</strong> I built a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and tokens. Furthermore, I replaced all discrete floating-point numbers with a continuous <code>&lt;C&gt;</code> embedding token (xVal).</li>
   <li><strong>Result:</strong> The maximum sequence length (vocab size) dropped from 67 tokens to 48 tokens.</li>
-  <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline (2025's proposal) using Prefix + <code>&lt;C&gt;</code>)</strong> to <strong>47.4% (Proposed)</strong> on the test split.</li>
+  <li><strong>Impact:</strong> This structural compression nearly doubled the Exact Match accuracy from <strong>25.7% (Baseline (2025's proposal) using Prefix + <code>&lt;C&gt;</code>)</strong> to <strong>47.4% (Proposed)</strong> on the test split. It also demonstrates superior true
+generalization, achieving a better validation accuracy <strong>(56.3% vs 52.1%)</strong>, proving it effectively learns the physics rather than just
+memorizing syntax.</li>
 </ul>
-![]("C:\Users\Mannan Golchha\OneDrive\Pictures\Screenshots\Screenshot 2026-03-20 195206.png")
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+</p>
+<p align="center">
+  <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code> Tokenization
+</p>
 
 <h3>2. Next-Gen Generative Core: KAN vs. MLP (Task 2.6)</h3>
 <p>To push the generative seeding capabilities further, I experimented with replacing the standard linear MLPs inside the Transformer blocks with Kolmogorov-Arnold Networks (KANs).</p>
@@ -96,7 +105,9 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><strong>The Experiment:</strong> Located in <code>src/models/kan_mlp.py</code>, I benchmarked both layers.</li>
   <li><strong>Result:</strong> By using learnable B-splines on the edges instead of fixed linear node activations, the KAN converged significantly faster and achieved a lower MSE floor, proving its superiority for mapping continuous physical geometries.</li>
 </ul>
-
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/kan_mlp.png" height="350" />
+</p>
 <h3>3. Inference Upgrades: Beam Search &amp; Exposure Bias (Task 2.6)</h3>
 <p>To properly seed a generative Monte Carlo Tree Search (MCTS), a model must output Top-K candidate skeletons rather than a single greedy prediction.</p>
 <ul>
