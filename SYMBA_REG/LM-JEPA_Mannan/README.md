@@ -1,6 +1,13 @@
 <h1 align="center">Symba 2026: LM-JEPA for Symbolic Regression</h1>
 
-<p align="center"><strong>Read the Full GSoC 2026 Proposal: <a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">LM-JEPA Proposal (Google Docs)</a></strong></p>
+<p align="center"><strong><h4 align="center">Read the Full GSoC 2026 Proposal: <a href="https://docs.google.com/document/d/1j8NAA6b-6zpPlglhggNHf5iv9rBzBXs1lFekACsmZC0/edit?usp=sharing">LM-JEPA Proposal (Google Docs)</a></strong></p></h4>
+
+<div align="center">
+  <p><em><h5><strong>Note on Parallel Submission:</strong> While this repository branch focuses on continuous latent-space prediction via LM-JEPA (Task 2.7), I have also architected and submitted a highly synergistic parallel proposal for <strong>Using Next-Gen Transformers to Seed Generative Models for Symbolic Regression </strong>(Task 2.6). That proposal focuses on search-augmented text generation using Next-Gen Transformers and generative algorithms (like GP, MCTS, KANs).<br></h5>
+<a href="https://docs.google.com/document/d/1WaaLbe_9OeSylVhjENV5TdaDmsZNnZ357YENC6tNcUw/edit?usp=sharing">Read my Next-Gen Transformers Proposal Here</a> | <a href="https://github.com/Mannan-15/SYMBA/tree/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan">View the Next-Gen Code Branch</a></em></p>
+</div>
+
+<hr>
 
 <p>This codebase contains the Proof of Concept (PoC) experiments, continuous tokenization pipeline, and Joint-Embedding architectures designed for my GSoC 2026 proposal.</p>
 
@@ -76,36 +83,69 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 <pre><code>python3 src/baselines/old_sliding_window.py</code></pre>
 
 <hr>
-
 <h2>Key Experiments &amp; Architectural Updates</h2>
-<p><b>(For deep technical details and loss landscape graphs, please refer to Section 2 of my written proposal)</b></p>
-<p>To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered three major architectural upgrades to shift Symba from <em>syntactic text generation</em> to <em>semantic physics prediction</em>:</p>
+<p>To fulfill these tasks, I audited the 2024/2025 ML4SCI baselines and engineered three major architectural upgrades to shift Symba from <em>syntactic text generation</em> to <em>semantic physics prediction</em>. <b>(For deep technical proofs and loss landscape graphs, please refer to Section 2 of the proposal)</b>.</p>
 
 <h3>1. Tokenization Rationale, T-Net, &amp; Inference Upgrades (Task 1.1)</h3>
-<p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants.</p>
+<p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants. To fix this, I engineered a mathematically enforced <strong>Postfix + <code>&lt;C&gt;</code> Tokenizer</strong>.</p>
 <ul>
-  <li><strong>Data Encoding (T-Net):</strong> I integrated and retained the T-Net encoder for the physical tabular data <code>(x)</code>. Its permutation-invariant architecture is mathematically required to handle unordered sets of physical observations without injecting artificial sequence biases.</li>
-  <li><strong>Postfix vs. Prefix + <code>&lt;C&gt;</code> Tokenization:</strong> Prefix notation caused severe sequence bloat. I engineered a mathematically enforced Postfix tokenizer that completely removes redundant parentheses. Additionally, I replaced all discrete floating-point numbers with a continuous <code>&lt;C&gt;</code> embedding token.</li>
-  <li><strong>Beam Search &amp; Exposure Bias:</strong> I implemented a Top-K Beam Search inference script to test the generative capabilities. Testing revealed severe <strong>Exposure Bias</strong> in the baseline models (collapsing to 0.00% exact match during autoregressive rollout). This proved that standard teacher-forcing is highly brittle for math, directly motivating my shift to a JEPA continuous-space architecture.</li>
-  <li><strong>Impact:</strong> The maximum sequence length dropped from 67 tokens down to 48. This structural compression nearly doubled the greedy Exact Match accuracy from <strong>25.7% (Baseline)</strong> to <strong>47.4% (Proposed)</strong> on my PoC test split.</li>
+  <li><strong>Data Encoding (T-Net):</strong> I integrated the T-Net encoder for the physical tabular data <code>(x)</code>. Its permutation-invariant architecture handles unordered sets of physical observations without injecting artificial sequence biases.</li>
+  <li><strong>Postfix vs. Prefix + <code>&lt;C&gt;</code> Tokenization:</strong> I engineered a mathematically enforced Postfix tokenizer that completely removes redundant parentheses and replaces discrete floating-point numbers with a continuous embedding token.</li>
+  <li><strong>Compute Reinvestment:</strong> The maximum sequence length dropped from 67 tokens down to 48. This ~30% compression drastically reduces the <code>O(N^2)</code> self-attention compute cost, buying back architectural headroom to learn deeper physics.</li>
+  <li><strong>Impact:</strong> The maximum sequence length dropped from 67 tokens down to 48. Because Postfix removes redundant tokens that artificially inflate training metrics, it forces the model to learn true mathematical generalization. This structural compression improved <strong>Validation Accuracy from 52.1% to 56.3%</strong> and nearly doubled the greedy <strong>Exact Match accuracy from 25.7% (Baseline) to 47.4% (Proposed)</strong>.</li>
 </ul>
 
-<h3>2. The LM-JEPA Core, Architecture, &amp; VICReg (Task 2.7)</h3>
-<p>A standard L2 prediction loss in a Joint-Embedding environment causes both networks to instantly collapse and output vectors of all zeros. To prevent this, I engineered a stabilized continuous-space pipeline.</p>
+<p align="center">
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/postfix_parse.png" width="45%" />
+</p>
+
+<p align="center">
+  
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/postfix_data.png" height="350" width="49%" />
+</p>
+<p align="center">
+  <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code>
+</p>
+
+<h3>2. The LM-JEPA Core Architecture &amp; Pipeline (Task 2.7)</h3>
+<p>A standard L2 prediction loss in a continuous Joint-Embedding environment causes both networks to instantly collapse and output vectors of all zeros. To prevent this, I engineered a stabilized continuous-space pipeline.</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/lm_jepa_architecture.png" alt="LM-JEPA Architecture Pipeline" height="650" width="500" />
+  <br><em>Figure: The LM-JEPA Pipeline bridging continuous physics (Context) and discrete math (Target).</em>
+</p>
+
+<h4>Architecture Breakdown:</h4>
 <ul>
-  <li><strong>The Architecture:</strong> The pipeline pairs a Context Encoder (utilizing Sparse Attention Transformer blocks + an MLP projector to process physics data) with a frozen Math Target Encoder (utilizing a GRU + an MLP projector to process the Postfix AST).</li>
-  <li><strong>VICReg Optimization:</strong> To actively prevent representation collapse during this PoC phase, I implemented Variance-Invariance-Covariance Regularization (VICReg) to explicitly sculpt and penalize the latent space, forcing the network to maintain information density.</li>
-  <li><strong>Metrics &amp; Evaluation:</strong> I benchmarked the pre-training loop using a comprehensive suite of metrics: L2 MSE (Prediction Loss), total VICReg Loss, Variance Penalty, Latent Cosine Similarity, and Kernel Density Estimation (KDE) distributions.</li>
-  <li><strong>Result:</strong> The PoC training dynamics confirm the architecture maps continuous physical data to discrete mathematical structures without collapsing. The <strong>Variance Penalty</strong> flatlined at 0.000, the <strong>Latent Cosine Similarity</strong> aligned to a perfect 1.000, and the KDE plots verify a dense, decorrelated distribution of latent concepts.</li>
+  <li><strong>Context Encoder (Physics via Sparse-Transformer):</strong> Raw physical point clouds (<code>x</code>) are processed through a T-Net to generate 128D invariant embeddings. A Sparse Attention Transformer captures global physical relationships, outputting a highly dense context embedding (<code>s_x</code>).</li>
+  <li><strong>Target Encoder (Math via Sequence Modeling):</strong> The target equation (<code>y</code>) is parsed into an AST and tokenized into Postfix notation. A GRU + MLP projector ingests these variable-length tokens to output a fixed-size mathematical latent vector (<code>s_y</code>).</li>
+  <li><strong>The Predictor:</strong> A lightweight neural network bridges the modalities, taking the physics context (<code>s_x</code>) and predicting the mathematical target (<code>s_y_hat</code>) purely in latent space.</li>
+  <li><strong>VICReg Optimization:</strong> To prevent representation collapse, Variance-Invariance-Covariance Regularization (VICReg) applies a hinge loss to maintain embedding variance, explicitly sculpting the latent space to remain information-dense.</li>
 </ul>
+
+<h4>Pretraining Results:</h4>
+<p>The training dynamics mathematically prove that the Context Encoder successfully maps continuous physical data to discrete mathematical structures without collapsing. The <strong>Variance Penalty</strong> flatlined at 0.000, the <strong>Latent Cosine Similarity</strong> aligned to a perfect 1.000, and the KDE plots verify a dense, decorrelated distribution of latent concepts.</p>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/jepa_alignments_result.png" height="500" width="900" />
+</p>
 
 <h3>3. Next-Gen Feature Encoders: KAN vs. MLP</h3>
 <p>To push the physical mapping capabilities further, I experimented with replacing the standard linear MLPs inside the Transformer blocks with Kolmogorov-Arnold Networks (KANs).</p>
 <ul>
-  <li><strong>The Experiment:</strong> Located in <code>src/models/kan_mlp.py</code>, I benchmarked both layers on a noisy, non-linear dataset.</li>
+  <li><strong>The Experiment:</strong> Located in <code>src/models/kan_mlp.py</code>, I benchmarked both layers on a noisy, non-linear dataset <code>(y = e^(-0.1x) * sin(3x) + noise)</code>.</li>
   <li><strong>Result:</strong> By using learnable B-splines on the edges instead of fixed linear node activations, the KAN converged significantly faster and achieved a lower MSE floor, proving its superiority for the upcoming Phase 1 scaling of LM-JEPA.</li>
 </ul>
-
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/kan_mlp.png" height="350" />
+</p>
 <hr>
 
 <h2>Repository Navigation</h2>
