@@ -1,0 +1,2810 @@
+[
+  {
+    "row": 0,
+    "output": "f",
+    "original_formula": "exp(-theta**2/2)/sqrt(2*pi)",
+    "symbolic_parse_tree": "mul(exp(mul(mul(const(-1.0), pow(id(theta), const(2.0))), pow(const(2.0), const(-1.0)))), pow(pow(mul(const(2.0), id(pi)), const(0.5)), const(-1.0)))",
+    "variables": {
+      "theta": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 1,
+    "output": "f",
+    "original_formula": "exp(-(theta/sigma)**2/2)/(sqrt(2*pi)*sigma)",
+    "symbolic_parse_tree": "mul(exp(mul(mul(const(-1.0), pow(mul(id(theta), pow(id(sigma), const(-1.0))), const(2.0))), pow(const(2.0), const(-1.0)))), pow(mul(pow(mul(const(2.0), id(pi)), const(0.5)), id(sigma)), const(-1.0)))",
+    "variables": {
+      "sigma": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 2,
+    "output": "f",
+    "original_formula": "exp(-((theta-theta1)/sigma)**2/2)/(sqrt(2*pi)*sigma)",
+    "symbolic_parse_tree": "mul(exp(mul(mul(const(-1.0), pow(mul(add(id(theta), mul(const(-1.0), id(theta1))), pow(id(sigma), const(-1.0))), const(2.0))), pow(const(2.0), const(-1.0)))), pow(mul(pow(mul(const(2.0), id(pi)), const(0.5)), id(sigma)), const(-1.0)))",
+    "variables": {
+      "sigma": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "theta1": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 3,
+    "output": "d",
+    "original_formula": "sqrt((x2-x1)**2+(y2-y1)**2)",
+    "symbolic_parse_tree": "pow(add(pow(add(id(x2), mul(const(-1.0), id(x1))), const(2.0)), pow(add(id(y2), mul(const(-1.0), id(y1))), const(2.0))), const(0.5))",
+    "variables": {
+      "x1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "y1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "y2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 4,
+    "output": "F",
+    "original_formula": "G*m1*m2/((x2-x1)**2+(y2-y1)**2+(z2-z1)**2)",
+    "symbolic_parse_tree": "mul(mul(mul(id(G), id(m1)), id(m2)), pow(add(add(pow(add(id(x2), mul(const(-1.0), id(x1))), const(2.0)), pow(add(id(y2), mul(const(-1.0), id(y1))), const(2.0))), pow(add(id(z2), mul(const(-1.0), id(z1))), const(2.0))), const(-1.0)))",
+    "variables": {
+      "m1": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "m2": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "G": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "x1": {
+        "low": 3.0,
+        "high": 4.0,
+        "type": "variable"
+      },
+      "x2": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "y1": {
+        "low": 3.0,
+        "high": 4.0,
+        "type": "variable"
+      },
+      "y2": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "z1": {
+        "low": 3.0,
+        "high": 4.0,
+        "type": "variable"
+      },
+      "z2": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 5,
+    "output": "m",
+    "original_formula": "m_0/sqrt(1-v**2/c**2)",
+    "symbolic_parse_tree": "mul(id(m_0), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(v), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "m_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 6,
+    "output": "A",
+    "original_formula": "x1*y1+x2*y2+x3*y3",
+    "symbolic_parse_tree": "add(add(mul(id(x1), id(y1)), mul(id(x2), id(y2))), mul(id(x3), id(y3)))",
+    "variables": {
+      "x1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x3": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "y1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "y2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "y3": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 7,
+    "output": "F",
+    "original_formula": "mu*Nn",
+    "symbolic_parse_tree": "mul(id(mu), id(Nn))",
+    "variables": {
+      "mu": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Nn": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 8,
+    "output": "F",
+    "original_formula": "q1*q2*r/(4*pi*epsilon*r**3)",
+    "symbolic_parse_tree": "mul(mul(mul(id(q1), id(q2)), id(r)), pow(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), pow(id(r), const(3.0))), const(-1.0)))",
+    "variables": {
+      "q1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "q2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 9,
+    "output": "Ef",
+    "original_formula": "q1*r/(4*pi*epsilon*r**3)",
+    "symbolic_parse_tree": "mul(mul(id(q1), id(r)), pow(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), pow(id(r), const(3.0))), const(-1.0)))",
+    "variables": {
+      "q1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 10,
+    "output": "F",
+    "original_formula": "q2*Ef",
+    "symbolic_parse_tree": "mul(id(q2), id(Ef))",
+    "variables": {
+      "q2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 11,
+    "output": "F",
+    "original_formula": "q*(Ef+B*v*sin(theta))",
+    "symbolic_parse_tree": "mul(id(q), add(id(Ef), mul(mul(id(B), id(v)), sin(id(theta)))))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 12,
+    "output": "K",
+    "original_formula": "1/2*m*(v**2+u**2+w**2)",
+    "symbolic_parse_tree": "mul(mul(mul(const(1.0), pow(const(2.0), const(-1.0))), id(m)), add(add(pow(id(v), const(2.0)), pow(id(u), const(2.0))), pow(id(w), const(2.0))))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "u": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "w": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 13,
+    "output": "U",
+    "original_formula": "G*m1*m2*(1/r2-1/r1)",
+    "symbolic_parse_tree": "mul(mul(mul(id(G), id(m1)), id(m2)), add(mul(const(1.0), pow(id(r2), const(-1.0))), mul(const(-1.0), mul(const(1.0), pow(id(r1), const(-1.0))))))",
+    "variables": {
+      "m1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "m2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "G": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 14,
+    "output": "U",
+    "original_formula": "m*g*z",
+    "symbolic_parse_tree": "mul(mul(id(m), id(g)), id(z))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "g": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "z": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 15,
+    "output": "U",
+    "original_formula": "1/2*k_spring*x**2",
+    "symbolic_parse_tree": "mul(mul(mul(const(1.0), pow(const(2.0), const(-1.0))), id(k_spring)), pow(id(x), const(2.0)))",
+    "variables": {
+      "k_spring": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 16,
+    "output": "x1",
+    "original_formula": "(x-u*t)/sqrt(1-u**2/c**2)",
+    "symbolic_parse_tree": "mul(add(id(x), mul(const(-1.0), mul(id(u), id(t)))), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(u), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "x": {
+        "low": 5.0,
+        "high": 10.0,
+        "type": "variable"
+      },
+      "u": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 20.0,
+        "type": "variable"
+      },
+      "t": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 17,
+    "output": "t1",
+    "original_formula": "(t-u*x/c**2)/sqrt(1-u**2/c**2)",
+    "symbolic_parse_tree": "mul(add(id(t), mul(const(-1.0), mul(mul(id(u), id(x)), pow(pow(id(c), const(2.0)), const(-1.0))))), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(u), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "x": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      },
+      "u": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "t": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 18,
+    "output": "p",
+    "original_formula": "m_0*v/sqrt(1-v**2/c**2)",
+    "symbolic_parse_tree": "mul(mul(id(m_0), id(v)), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(v), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "m_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 19,
+    "output": "v1",
+    "original_formula": "(u+v)/(1+u*v/c**2)",
+    "symbolic_parse_tree": "mul(add(id(u), id(v)), pow(add(const(1.0), mul(mul(id(u), id(v)), pow(pow(id(c), const(2.0)), const(-1.0)))), const(-1.0)))",
+    "variables": {
+      "c": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "u": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 20,
+    "output": "r",
+    "original_formula": "(m1*r1+m2*r2)/(m1+m2)",
+    "symbolic_parse_tree": "mul(add(mul(id(m1), id(r1)), mul(id(m2), id(r2))), pow(add(id(m1), id(m2)), const(-1.0)))",
+    "variables": {
+      "m1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "m2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 21,
+    "output": "tau",
+    "original_formula": "r*F*sin(theta)",
+    "symbolic_parse_tree": "mul(mul(id(r), id(F)), sin(id(theta)))",
+    "variables": {
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "F": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 0.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 22,
+    "output": "L",
+    "original_formula": "m*r*v*sin(theta)",
+    "symbolic_parse_tree": "mul(mul(mul(id(m), id(r)), id(v)), sin(id(theta)))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 23,
+    "output": "E_n",
+    "original_formula": "1/2*m*(omega**2+omega_0**2)*1/2*x**2",
+    "symbolic_parse_tree": "mul(mul(mul(mul(mul(mul(const(1.0), pow(const(2.0), const(-1.0))), id(m)), add(pow(id(omega), const(2.0)), pow(id(omega_0), const(2.0)))), const(1.0)), pow(const(2.0), const(-1.0))), pow(id(x), const(2.0)))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "omega_0": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "x": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 24,
+    "output": "Volt",
+    "original_formula": "q/C",
+    "symbolic_parse_tree": "mul(id(q), pow(id(C), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "C": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 26,
+    "output": "foc",
+    "original_formula": "1/(1/d1+n/d2)",
+    "symbolic_parse_tree": "mul(const(1.0), pow(add(mul(const(1.0), pow(id(d1), const(-1.0))), mul(id(n), pow(id(d2), const(-1.0)))), const(-1.0)))",
+    "variables": {
+      "d1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 27,
+    "output": "k",
+    "original_formula": "omega/c",
+    "symbolic_parse_tree": "mul(id(omega), pow(id(c), const(-1.0)))",
+    "variables": {
+      "omega": {
+        "low": 1.0,
+        "high": 10.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 28,
+    "output": "x",
+    "original_formula": "sqrt(x1**2+x2**2-2*x1*x2*cos(theta1-theta2))",
+    "symbolic_parse_tree": "pow(add(add(pow(id(x1), const(2.0)), pow(id(x2), const(2.0))), mul(const(-1.0), mul(mul(mul(const(2.0), id(x1)), id(x2)), cos(add(id(theta1), mul(const(-1.0), id(theta2))))))), const(0.5))",
+    "variables": {
+      "x1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 29,
+    "output": "Int",
+    "original_formula": "Int_0*sin(n*theta/2)**2/sin(theta/2)**2",
+    "symbolic_parse_tree": "mul(mul(id(Int_0), pow(sin(mul(mul(id(n), id(theta)), pow(const(2.0), const(-1.0)))), const(2.0))), pow(pow(sin(mul(id(theta), pow(const(2.0), const(-1.0)))), const(2.0)), const(-1.0)))",
+    "variables": {
+      "Int_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 31,
+    "output": "Pwr",
+    "original_formula": "q**2*a**2/(6*pi*epsilon*c**3)",
+    "symbolic_parse_tree": "mul(mul(pow(id(q), const(2.0)), pow(id(a), const(2.0))), pow(mul(mul(mul(const(6.0), id(pi)), id(epsilon)), pow(id(c), const(3.0))), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "a": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 32,
+    "output": "Pwr",
+    "original_formula": "(1/2*epsilon*c*Ef**2)*(8*pi*r**2/3)*(omega**4/(omega**2-omega_0**2)**2)",
+    "symbolic_parse_tree": "mul(mul(mul(mul(mul(mul(mul(mul(mul(mul(const(1.0), pow(const(2.0), const(-1.0))), id(epsilon)), id(c)), pow(id(Ef), const(2.0))), const(8.0)), id(pi)), pow(id(r), const(2.0))), pow(const(3.0), const(-1.0))), pow(id(omega), const(4.0))), pow(pow(add(pow(id(omega), const(2.0)), mul(const(-1.0), pow(id(omega_0), const(2.0)))), const(2.0)), const(-1.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "omega_0": {
+        "low": 3.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 33,
+    "output": "omega",
+    "original_formula": "q*v*B/p",
+    "symbolic_parse_tree": "mul(mul(mul(id(q), id(v)), id(B)), pow(id(p), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "p": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 34,
+    "output": "omega",
+    "original_formula": "omega_0/(1-v/c)",
+    "symbolic_parse_tree": "mul(id(omega_0), pow(add(const(1.0), mul(const(-1.0), mul(id(v), pow(id(c), const(-1.0))))), const(-1.0)))",
+    "variables": {
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "omega_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 35,
+    "output": "omega",
+    "original_formula": "(1+v/c)/sqrt(1-v**2/c**2)*omega_0",
+    "symbolic_parse_tree": "mul(mul(add(const(1.0), mul(id(v), pow(id(c), const(-1.0)))), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(v), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0))), id(omega_0))",
+    "variables": {
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "omega_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 36,
+    "output": "E_n",
+    "original_formula": "(h/(2*pi))*omega",
+    "symbolic_parse_tree": "mul(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), id(omega))",
+    "variables": {
+      "omega": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 37,
+    "output": "Int",
+    "original_formula": "I1+I2+2*sqrt(I1*I2)*cos(delta)",
+    "symbolic_parse_tree": "add(add(id(I1), id(I2)), mul(mul(const(2.0), pow(mul(id(I1), id(I2)), const(0.5))), cos(id(delta))))",
+    "variables": {
+      "I1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "I2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "delta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 38,
+    "output": "r",
+    "original_formula": "4*pi*epsilon*(h/(2*pi))**2/(m*q**2)",
+    "symbolic_parse_tree": "mul(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(2.0))), pow(mul(id(m), pow(id(q), const(2.0))), const(-1.0)))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 39,
+    "output": "E_n",
+    "original_formula": "3/2*pr*V",
+    "symbolic_parse_tree": "mul(mul(mul(const(3.0), pow(const(2.0), const(-1.0))), id(pr)), id(V))",
+    "variables": {
+      "pr": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "V": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 40,
+    "output": "E_n",
+    "original_formula": "1/(gamma-1)*pr*V",
+    "symbolic_parse_tree": "mul(mul(mul(const(1.0), pow(add(id(gamma), mul(const(-1.0), const(1.0))), const(-1.0))), id(pr)), id(V))",
+    "variables": {
+      "gamma": {
+        "low": 2.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "pr": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "V": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 41,
+    "output": "pr",
+    "original_formula": "n*kb*T/V",
+    "symbolic_parse_tree": "mul(mul(mul(id(n), id(kb)), id(T)), pow(id(V), const(-1.0)))",
+    "variables": {
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "V": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 42,
+    "output": "n",
+    "original_formula": "n_0*exp(-m*g*x/(kb*T))",
+    "symbolic_parse_tree": "mul(id(n_0), exp(mul(mul(mul(mul(const(-1.0), id(m)), id(g)), id(x)), pow(mul(id(kb), id(T)), const(-1.0)))))",
+    "variables": {
+      "n_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "g": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 43,
+    "output": "L_rad",
+    "original_formula": "h/(2*pi)*omega**3/(pi**2*c**2*(exp((h/(2*pi))*omega/(kb*T))-1))",
+    "symbolic_parse_tree": "mul(mul(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), pow(id(omega), const(3.0))), pow(mul(mul(pow(id(pi), const(2.0)), pow(id(c), const(2.0))), add(exp(mul(mul(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), id(omega)), pow(mul(id(kb), id(T)), const(-1.0)))), mul(const(-1.0), const(1.0)))), const(-1.0)))",
+    "variables": {
+      "omega": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 44,
+    "output": "v",
+    "original_formula": "mu_drift*q*Volt/d",
+    "symbolic_parse_tree": "mul(mul(mul(id(mu_drift), id(q)), id(Volt)), pow(id(d), const(-1.0)))",
+    "variables": {
+      "mu_drift": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Volt": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 45,
+    "output": "D",
+    "original_formula": "mob*kb*T",
+    "symbolic_parse_tree": "mul(mul(id(mob), id(kb)), id(T))",
+    "variables": {
+      "mob": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 46,
+    "output": "kappa",
+    "original_formula": "1/(gamma-1)*kb*v/A",
+    "symbolic_parse_tree": "mul(mul(mul(mul(const(1.0), pow(add(id(gamma), mul(const(-1.0), const(1.0))), const(-1.0))), id(kb)), id(v)), pow(id(A), const(-1.0)))",
+    "variables": {
+      "gamma": {
+        "low": 2.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "A": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 47,
+    "output": "E_n",
+    "original_formula": "n*kb*T*ln(V2/V1)",
+    "symbolic_parse_tree": "mul(mul(mul(id(n), id(kb)), id(T)), log(mul(id(V2), pow(id(V1), const(-1.0)))))",
+    "variables": {
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "V1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "V2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 48,
+    "output": "c",
+    "original_formula": "sqrt(gamma*pr/rho)",
+    "symbolic_parse_tree": "pow(mul(mul(id(gamma), id(pr)), pow(id(rho), const(-1.0))), const(0.5))",
+    "variables": {
+      "gamma": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "pr": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "rho": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 49,
+    "output": "E_n",
+    "original_formula": "m*c**2/sqrt(1-v**2/c**2)",
+    "symbolic_parse_tree": "mul(mul(id(m), pow(id(c), const(2.0))), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(v), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 50,
+    "output": "x",
+    "original_formula": "x1*(cos(omega*t)+alpha*cos(omega*t)**2)",
+    "symbolic_parse_tree": "mul(id(x1), add(cos(mul(id(omega), id(t))), mul(id(alpha), pow(cos(mul(id(omega), id(t))), const(2.0)))))",
+    "variables": {
+      "x1": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "t": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "alpha": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 51,
+    "output": "Pwr",
+    "original_formula": "kappa*(T2-T1)*A/d",
+    "symbolic_parse_tree": "mul(mul(mul(id(kappa), add(id(T2), mul(const(-1.0), id(T1)))), id(A)), pow(id(d), const(-1.0)))",
+    "variables": {
+      "kappa": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T1": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T2": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "A": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 52,
+    "output": "flux",
+    "original_formula": "Pwr/(4*pi*r**2)",
+    "symbolic_parse_tree": "mul(id(Pwr), pow(mul(mul(const(4.0), id(pi)), pow(id(r), const(2.0))), const(-1.0)))",
+    "variables": {
+      "Pwr": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 53,
+    "output": "Volt",
+    "original_formula": "q/(4*pi*epsilon*r)",
+    "symbolic_parse_tree": "mul(id(q), pow(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), id(r)), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 54,
+    "output": "Volt",
+    "original_formula": "1/(4*pi*epsilon)*p_d*cos(theta)/r**2",
+    "symbolic_parse_tree": "mul(mul(mul(mul(const(1.0), pow(mul(mul(const(4.0), id(pi)), id(epsilon)), const(-1.0))), id(p_d)), cos(id(theta))), pow(pow(id(r), const(2.0)), const(-1.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "p_d": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 55,
+    "output": "Ef",
+    "original_formula": "p_d/(4*pi*epsilon)*3*z/r**5*sqrt(x**2+y**2)",
+    "symbolic_parse_tree": "mul(mul(mul(mul(mul(id(p_d), pow(mul(mul(const(4.0), id(pi)), id(epsilon)), const(-1.0))), const(3.0)), id(z)), pow(pow(id(r), const(5.0)), const(-1.0))), pow(add(pow(id(x), const(2.0)), pow(id(y), const(2.0))), const(0.5)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "p_d": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "x": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "y": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "z": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 56,
+    "output": "Ef",
+    "original_formula": "p_d/(4*pi*epsilon)*3*cos(theta)*sin(theta)/r**3",
+    "symbolic_parse_tree": "mul(mul(mul(mul(mul(id(p_d), pow(mul(mul(const(4.0), id(pi)), id(epsilon)), const(-1.0))), const(3.0)), cos(id(theta))), sin(id(theta))), pow(pow(id(r), const(3.0)), const(-1.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "p_d": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 57,
+    "output": "E_n",
+    "original_formula": "3/5*q**2/(4*pi*epsilon*d)",
+    "symbolic_parse_tree": "mul(mul(mul(const(3.0), pow(const(5.0), const(-1.0))), pow(id(q), const(2.0))), pow(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), id(d)), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 58,
+    "output": "E_den",
+    "original_formula": "epsilon*Ef**2/2",
+    "symbolic_parse_tree": "mul(mul(id(epsilon), pow(id(Ef), const(2.0))), pow(const(2.0), const(-1.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 59,
+    "output": "Ef",
+    "original_formula": "sigma_den/epsilon*1/(1+chi)",
+    "symbolic_parse_tree": "mul(mul(mul(id(sigma_den), pow(id(epsilon), const(-1.0))), const(1.0)), pow(add(const(1.0), id(chi)), const(-1.0)))",
+    "variables": {
+      "sigma_den": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "chi": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 60,
+    "output": "x",
+    "original_formula": "q*Ef/(m*(omega_0**2-omega**2))",
+    "symbolic_parse_tree": "mul(mul(id(q), id(Ef)), pow(mul(id(m), add(pow(id(omega_0), const(2.0)), mul(const(-1.0), pow(id(omega), const(2.0))))), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "m": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "omega_0": {
+        "low": 3.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 61,
+    "output": "n",
+    "original_formula": "n_0*(1+p_d*Ef*cos(theta)/(kb*T))",
+    "symbolic_parse_tree": "mul(id(n_0), add(const(1.0), mul(mul(mul(id(p_d), id(Ef)), cos(id(theta))), pow(mul(id(kb), id(T)), const(-1.0)))))",
+    "variables": {
+      "n_0": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "p_d": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 62,
+    "output": "Pol",
+    "original_formula": "n_rho*p_d**2*Ef/(3*kb*T)",
+    "symbolic_parse_tree": "mul(mul(mul(id(n_rho), pow(id(p_d), const(2.0))), id(Ef)), pow(mul(mul(const(3.0), id(kb)), id(T)), const(-1.0)))",
+    "variables": {
+      "n_rho": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "p_d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 63,
+    "output": "Pol",
+    "original_formula": "n*alpha/(1-(n*alpha/3))*epsilon*Ef",
+    "symbolic_parse_tree": "mul(mul(mul(mul(id(n), id(alpha)), pow(add(const(1.0), mul(const(-1.0), mul(mul(id(n), id(alpha)), pow(const(3.0), const(-1.0))))), const(-1.0))), id(epsilon)), id(Ef))",
+    "variables": {
+      "n": {
+        "low": 0.0,
+        "high": 1.0,
+        "type": "variable"
+      },
+      "alpha": {
+        "low": 0.0,
+        "high": 1.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 64,
+    "output": "theta",
+    "original_formula": "1+n*alpha/(1-(n*alpha/3))",
+    "symbolic_parse_tree": "add(const(1.0), mul(mul(id(n), id(alpha)), pow(add(const(1.0), mul(const(-1.0), mul(mul(id(n), id(alpha)), pow(const(3.0), const(-1.0))))), const(-1.0))))",
+    "variables": {
+      "n": {
+        "low": 0.0,
+        "high": 1.0,
+        "type": "variable"
+      },
+      "alpha": {
+        "low": 0.0,
+        "high": 1.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 65,
+    "output": "B",
+    "original_formula": "1/(4*pi*epsilon*c**2)*2*I/r",
+    "symbolic_parse_tree": "mul(mul(mul(mul(const(1.0), pow(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), pow(id(c), const(2.0))), const(-1.0))), const(2.0)), id(I)), pow(id(r), const(-1.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "I": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 66,
+    "output": "rho_c",
+    "original_formula": "rho_c_0/sqrt(1-v**2/c**2)",
+    "symbolic_parse_tree": "mul(id(rho_c_0), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(v), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "rho_c_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 67,
+    "output": "j",
+    "original_formula": "rho_c_0*v/sqrt(1-v**2/c**2)",
+    "symbolic_parse_tree": "mul(mul(id(rho_c_0), id(v)), pow(pow(add(const(1.0), mul(const(-1.0), mul(pow(id(v), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))))), const(0.5)), const(-1.0)))",
+    "variables": {
+      "rho_c_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 68,
+    "output": "E_n",
+    "original_formula": "-mom*B*cos(theta)",
+    "symbolic_parse_tree": "mul(mul(mul(const(-1.0), id(mom)), id(B)), cos(id(theta)))",
+    "variables": {
+      "mom": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 69,
+    "output": "E_n",
+    "original_formula": "-p_d*Ef*cos(theta)",
+    "symbolic_parse_tree": "mul(mul(mul(const(-1.0), id(p_d)), id(Ef)), cos(id(theta)))",
+    "variables": {
+      "p_d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 70,
+    "output": "Volt",
+    "original_formula": "q/(4*pi*epsilon*r*(1-v/c))",
+    "symbolic_parse_tree": "mul(id(q), pow(mul(mul(mul(mul(const(4.0), id(pi)), id(epsilon)), id(r)), add(const(1.0), mul(const(-1.0), mul(id(v), pow(id(c), const(-1.0)))))), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 3.0,
+        "high": 10.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 71,
+    "output": "k",
+    "original_formula": "sqrt(omega**2/c**2-pi**2/d**2)",
+    "symbolic_parse_tree": "pow(add(mul(pow(id(omega), const(2.0)), pow(pow(id(c), const(2.0)), const(-1.0))), mul(const(-1.0), mul(pow(id(pi), const(2.0)), pow(pow(id(d), const(2.0)), const(-1.0))))), const(0.5))",
+    "variables": {
+      "omega": {
+        "low": 4.0,
+        "high": 6.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 2.0,
+        "high": 4.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 72,
+    "output": "flux",
+    "original_formula": "epsilon*c*Ef**2",
+    "symbolic_parse_tree": "mul(mul(id(epsilon), id(c)), pow(id(Ef), const(2.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 73,
+    "output": "E_den",
+    "original_formula": "epsilon*Ef**2",
+    "symbolic_parse_tree": "mul(id(epsilon), pow(id(Ef), const(2.0)))",
+    "variables": {
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 74,
+    "output": "I",
+    "original_formula": "q*v/(2*pi*r)",
+    "symbolic_parse_tree": "mul(mul(id(q), id(v)), pow(mul(mul(const(2.0), id(pi)), id(r)), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 75,
+    "output": "mom",
+    "original_formula": "q*v*r/2",
+    "symbolic_parse_tree": "mul(mul(mul(id(q), id(v)), id(r)), pow(const(2.0), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "v": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "r": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 76,
+    "output": "omega",
+    "original_formula": "g_*q*B/(2*m)",
+    "symbolic_parse_tree": "mul(mul(mul(id(g_), id(q)), id(B)), pow(mul(const(2.0), id(m)), const(-1.0)))",
+    "variables": {
+      "g_": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 77,
+    "output": "mom",
+    "original_formula": "q*h/(4*pi*m)",
+    "symbolic_parse_tree": "mul(mul(id(q), id(h)), pow(mul(mul(const(4.0), id(pi)), id(m)), const(-1.0)))",
+    "variables": {
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 78,
+    "output": "E_n",
+    "original_formula": "g_*mom*B*Jz/(h/(2*pi))",
+    "symbolic_parse_tree": "mul(mul(mul(mul(id(g_), id(mom)), id(B)), id(Jz)), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(-1.0)))",
+    "variables": {
+      "g_": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Jz": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "mom": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 79,
+    "output": "n",
+    "original_formula": "n_0/(exp(mom*B/(kb*T))+exp(-mom*B/(kb*T)))",
+    "symbolic_parse_tree": "mul(id(n_0), pow(add(exp(mul(mul(id(mom), id(B)), pow(mul(id(kb), id(T)), const(-1.0)))), exp(mul(mul(mul(const(-1.0), id(mom)), id(B)), pow(mul(id(kb), id(T)), const(-1.0))))), const(-1.0)))",
+    "variables": {
+      "n_0": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "mom": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 80,
+    "output": "M",
+    "original_formula": "n_rho*mom*tanh(mom*B/(kb*T))",
+    "symbolic_parse_tree": "mul(mul(id(n_rho), id(mom)), tanh(mul(mul(id(mom), id(B)), pow(mul(id(kb), id(T)), const(-1.0)))))",
+    "variables": {
+      "n_rho": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "mom": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 81,
+    "output": "f",
+    "original_formula": "mom*H/(kb*T)+(mom*alpha)/(epsilon*c**2*kb*T)*M",
+    "symbolic_parse_tree": "add(mul(mul(id(mom), id(H)), pow(mul(id(kb), id(T)), const(-1.0))), mul(mul(mul(id(mom), id(alpha)), pow(mul(mul(mul(id(epsilon), pow(id(c), const(2.0))), id(kb)), id(T)), const(-1.0))), id(M)))",
+    "variables": {
+      "mom": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "H": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "alpha": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "c": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "M": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 82,
+    "output": "E_n",
+    "original_formula": "mom*(1+chi)*B",
+    "symbolic_parse_tree": "mul(mul(id(mom), add(const(1.0), id(chi))), id(B))",
+    "variables": {
+      "mom": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "chi": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 83,
+    "output": "F",
+    "original_formula": "Y*A*x/d",
+    "symbolic_parse_tree": "mul(mul(mul(id(Y), id(A)), id(x)), pow(id(d), const(-1.0)))",
+    "variables": {
+      "Y": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "A": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "x": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 84,
+    "output": "mu_S",
+    "original_formula": "Y/(2*(1+sigma))",
+    "symbolic_parse_tree": "mul(id(Y), pow(mul(const(2.0), add(const(1.0), id(sigma))), const(-1.0)))",
+    "variables": {
+      "Y": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "sigma": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 85,
+    "output": "n",
+    "original_formula": "1/(exp((h/(2*pi))*omega/(kb*T))-1)",
+    "symbolic_parse_tree": "mul(const(1.0), pow(add(exp(mul(mul(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), id(omega)), pow(mul(id(kb), id(T)), const(-1.0)))), mul(const(-1.0), const(1.0))), const(-1.0)))",
+    "variables": {
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 86,
+    "output": "E_n",
+    "original_formula": "(h/(2*pi))*omega/(exp((h/(2*pi))*omega/(kb*T))-1)",
+    "symbolic_parse_tree": "mul(mul(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), id(omega)), pow(add(exp(mul(mul(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), id(omega)), pow(mul(id(kb), id(T)), const(-1.0)))), mul(const(-1.0), const(1.0))), const(-1.0)))",
+    "variables": {
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "kb": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "T": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 87,
+    "output": "omega",
+    "original_formula": "2*mom*B/(h/(2*pi))",
+    "symbolic_parse_tree": "mul(mul(mul(const(2.0), id(mom)), id(B)), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(-1.0)))",
+    "variables": {
+      "mom": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "B": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 88,
+    "output": "prob",
+    "original_formula": "sin(E_n*t/(h/(2*pi)))**2",
+    "symbolic_parse_tree": "pow(sin(mul(mul(id(E_n), id(t)), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(-1.0)))), const(2.0))",
+    "variables": {
+      "E_n": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "t": {
+        "low": 1.0,
+        "high": 2.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 4.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 89,
+    "output": "prob",
+    "original_formula": "(p_d*Ef*t/(h/(2*pi)))*sin((omega-omega_0)*t/2)**2/((omega-omega_0)*t/2)**2",
+    "symbolic_parse_tree": "mul(mul(mul(mul(mul(id(p_d), id(Ef)), id(t)), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(-1.0))), pow(sin(mul(mul(add(id(omega), mul(const(-1.0), id(omega_0))), id(t)), pow(const(2.0), const(-1.0)))), const(2.0))), pow(pow(mul(mul(add(id(omega), mul(const(-1.0), id(omega_0))), id(t)), pow(const(2.0), const(-1.0))), const(2.0)), const(-1.0)))",
+    "variables": {
+      "p_d": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "Ef": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "t": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 3.0,
+        "type": "variable"
+      },
+      "omega": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "omega_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 90,
+    "output": "E_n",
+    "original_formula": "mom*sqrt(Bx**2+By**2+Bz**2)",
+    "symbolic_parse_tree": "mul(id(mom), pow(add(add(pow(id(Bx), const(2.0)), pow(id(By), const(2.0))), pow(id(Bz), const(2.0))), const(0.5)))",
+    "variables": {
+      "mom": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Bx": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "By": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "Bz": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 91,
+    "output": "L",
+    "original_formula": "n*(h/(2*pi))",
+    "symbolic_parse_tree": "mul(mul(id(n), id(h)), pow(mul(const(2.0), id(pi)), const(-1.0)))",
+    "variables": {
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 92,
+    "output": "v",
+    "original_formula": "2*E_n*d**2*k/(h/(2*pi))",
+    "symbolic_parse_tree": "mul(mul(mul(mul(const(2.0), id(E_n)), pow(id(d), const(2.0))), id(k)), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(-1.0)))",
+    "variables": {
+      "E_n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "k": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 94,
+    "output": "E_n",
+    "original_formula": "2*U*(1-cos(k*d))",
+    "symbolic_parse_tree": "mul(mul(const(2.0), id(U)), add(const(1.0), mul(const(-1.0), cos(mul(id(k), id(d))))))",
+    "variables": {
+      "U": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "k": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 95,
+    "output": "m",
+    "original_formula": "(h/(2*pi))**2/(2*E_n*d**2)",
+    "symbolic_parse_tree": "mul(pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(2.0)), pow(mul(mul(const(2.0), id(E_n)), pow(id(d), const(2.0))), const(-1.0)))",
+    "variables": {
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "E_n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 96,
+    "output": "k",
+    "original_formula": "2*pi*alpha/(n*d)",
+    "symbolic_parse_tree": "mul(mul(mul(const(2.0), id(pi)), id(alpha)), pow(mul(id(n), id(d)), const(-1.0)))",
+    "variables": {
+      "alpha": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "d": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 97,
+    "output": "f",
+    "original_formula": "beta*(1+alpha*cos(theta))",
+    "symbolic_parse_tree": "mul(id(beta), add(const(1.0), mul(id(alpha), cos(id(theta)))))",
+    "variables": {
+      "beta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "alpha": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "theta": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  },
+  {
+    "row": 98,
+    "output": "E_n",
+    "original_formula": "-m*q**4/(2*(4*pi*epsilon)**2*(h/(2*pi))**2)*(1/n**2)",
+    "symbolic_parse_tree": "mul(mul(mul(mul(mul(const(-1.0), id(m)), pow(id(q), const(4.0))), pow(mul(mul(const(2.0), pow(mul(mul(const(4.0), id(pi)), id(epsilon)), const(2.0))), pow(mul(id(h), pow(mul(const(2.0), id(pi)), const(-1.0))), const(2.0))), const(-1.0))), const(1.0)), pow(pow(id(n), const(2.0)), const(-1.0)))",
+    "variables": {
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "h": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "n": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "epsilon": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {
+      "pi": {
+        "type": "constant",
+        "value": 3.141592653589793
+      }
+    }
+  },
+  {
+    "row": 99,
+    "output": "j",
+    "original_formula": "-rho_c_0*q*A_vec/m",
+    "symbolic_parse_tree": "mul(mul(mul(mul(const(-1.0), id(rho_c_0)), id(q)), id(A_vec)), pow(id(m), const(-1.0)))",
+    "variables": {
+      "rho_c_0": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "q": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "A_vec": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      },
+      "m": {
+        "low": 1.0,
+        "high": 5.0,
+        "type": "variable"
+      }
+    },
+    "constants": {}
+  }
+]
