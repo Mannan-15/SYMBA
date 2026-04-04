@@ -33,6 +33,7 @@
   <li><strong>The Parser:</strong> <a href="src/parser/symbolic_parser.py">src/parser/symbolic_parser.py</a></li>
   <li><strong>Tokenized Target Data:</strong> The fully parsed and tokenized postfix equations are stored in <a href="data/feynman_parse_trees.json">data/feynman_parse_trees.json</a></li>
   <li><strong>Vocab Builder:</strong> The Postfix vocabulary builder logic is located in <a href="src/models/vocab_builder_postfix.py">src/models/vocab_builder_postfix.py</a></li>
+  <li><strong>T-Net Embeddings: </strong><a href="https://github.com/Mannan-15/SYMBA/blob/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/src/embeddings/t_net_embeddings.py">src/embeddings/t_net_embeddings.py</a></li>
 </ul>
 
 <h3>Task 2.7: LM-JEPA Architecture</h3>
