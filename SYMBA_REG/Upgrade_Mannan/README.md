@@ -33,6 +33,7 @@
   <li><strong>The Parser:</strong> <a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/parser/symbolic_parser.py">src/parser/symbolic_parser.py</a></li>
   <li><strong>Tokenized Target Data:</strong> The fully parsed and tokenized postfix equations are stored in <a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/parser/symbolic_parser.py">src/parser/feynman_parse_trees_postfix.json</a></li>
   <li><strong>Vocab Builder:</strong> The Postfix vocabulary builder logic is located in <a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/models/vocab_builder_postfix.py">src/models/vocab_builder_postfix.py</a></li>
+  <li><strong>T-Net Embeddings: </strong><a href="https://github.com/Mannan-15/SYMBA/blob/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/src/embeddings/t_net_embeddings.py">src/embeddings/t_net_embeddings.py</a></li>
 </ul>
 
 <h3>Task 2.6: Next-Gen Transformer Models</h3>
