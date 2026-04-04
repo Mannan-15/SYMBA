@@ -95,7 +95,7 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><strong>Compute Reinvestment:</strong> The maximum sequence length dropped from 67 tokens down to 48. This ~30% compression drastically reduces the <code>O(N^2)</code> self-attention compute cost, buying back architectural headroom to learn deeper physics.</li>
   <li><strong>Impact:</strong> The maximum sequence length dropped from 67 tokens down to 48. Because Postfix removes redundant tokens that artificially inflate training metrics, it forces the model to learn true mathematical generalization. This structural compression improved <strong>Validation Accuracy from 52.1% to 56.3%</strong> and nearly doubled the greedy <strong>Exact Match accuracy from 25.7% (Baseline) to 47.4% (Proposed)</strong>.</li>
 </ul>
-
+<p>Furthermore, the training curves reveal that while the Prefix baseline flatlined after ~40 epochs, the Postfix loss remained dynamic indicating that training beyond this 50 epochs PoC will yield even higher ultimate accuracy.</p>
 <p align="center">
   <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code>
