@@ -97,6 +97,11 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 </ul>
 
 <p align="center">
+  <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code>
+</p>
+<br>
+<p align="center">
 <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
 <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
 </p>
@@ -110,10 +115,6 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   
   <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
   <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/postfix_data.png" height="350" width="49%" />
-</p>
-<p align="center">
-  <b>Left:</b> Prefix + <code>&lt;C&gt;</code> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <b>Right:</b> Proposed Postfix + <code>&lt;C&gt;</code>
 </p>
 
 <h3>2. The LM-JEPA Core Architecture &amp; Pipeline (Task 2.7)</h3>
