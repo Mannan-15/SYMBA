@@ -1,6 +1,6 @@
 <h1>Symba 2026: Next-Gen Transformers for Symbolic Regression</h1>
 
-<p align="center"><strong><h4 align="center">Read the Full GSoC 2026 Proposal:<a href="https://docs.google.com/document/d/1WaaLbe_9OeSylVhjENV5TdaDmsZNnZ357YENC6tNcUw/edit?usp=sharing">Symba 2026 Proposal (Google Docs)</a></strong></p></h4>
+<p align="center"><strong><h4 align="center">Read the Full GSoC 2026 Proposal: <a href="https://docs.google.com/document/d/1WaaLbe_9OeSylVhjENV5TdaDmsZNnZ357YENC6tNcUw/edit?usp=sharing">Symba 2026 Proposal (Google Docs)</a></strong></p></h4>
 
 <div align="center">
 <p><em><strong><h5>Note on Parallel Submission:</strong> While this repository branch focuses on search-augmented text generation (Task 2.6), I have also architected and submitted a highly synergistic parallel proposal for <strong>LM-JEPA for Symbolic Regression</strong>(Task 2.7). That proposal abandons text generation entirely in favor of continuous latent-space prediction.<br></h5>
@@ -83,7 +83,7 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 <p><b>(For deep technical proofs and loss landscape graphs, please refer to Section 2 of the proposal)</b></p>
 <p>To fulfill these tasks, I audited the 2025's Krish Malik's proposal and engineered three major architectural upgrades. Below is the end-to-end generative pipeline implemented for task:</p>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/next_gen_architecture.png" height="750" width="550" />
+<img src="plots/next_gen_architecture.png" height="750" width="550" />
 </p>
 <h3>1. Tokenization Rationale: Postfix + <code>&lt;C&gt;</code> (Task 1.1)</h3>
 <p>The legacy baseline relied on bloated Prefix notation and discrete digit prediction, which caused massive sequence lengths and severe hallucination of physical constants. To fix this, I engineered a mathematically enforced <strong>Postfix + <code>&lt;C&gt;</code> Tokenizer</strong>.</p>
@@ -101,16 +101,16 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 </p>
 <br>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+<img src="plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+<img src="plots/Postfix_exactmatch.png" width="45%" />
 </p>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/postfix_parse.png" width="45%" />
+<img src="plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
+<img src="plots/postfix_parse.png" width="45%" />
 </p>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/postfix_data.png" height="350" width="49%" />
+<img src="plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
+<img src="plots/postfix_data.png" height="350" width="49%" />
 </p>
 
 
@@ -120,7 +120,7 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 <li><strong>Result:</strong> By replacing static node activations with learnable, continuous B-spline functions on the edges, the KAN natively maps to physical geometries drastically better than linear weights. The KAN converged significantly faster and achieved a much lower ultimate MSE floor.</li>
 </ul>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/kan_mlp.png" height="350" />
+<img src="plots/kan_mlp.png" height="350" />
 </p>
 
 <h3>3. Inference Upgrades: Beam Search &amp; Exposure Bias (Task 2.6)</h3>
@@ -130,7 +130,7 @@ To run the original 2025's baseline model and observe the sequence bloat and bas
 <li><strong>Diagnosis:</strong> This revealed severe <strong>Exposure Bias</strong>. Because the baseline is trained purely with teacher forcing, it never learns to recover from its own autoregressive mistakes during inference. This proves standard next-token prediction is insufficient for generative seeding, directly necessitating the <strong>GRPO Alignment Loop</strong> proposed in Section 3 of my formal proposal.</li>
 </ul>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/beam_search_stats.png" height="350" width="550" />
+<img src="plots/beam_search_stats.png" height="350" width="550" />
 </p>
 
 <hr>
