@@ -102,26 +102,26 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 </p>
 <br>
 <p align="center">
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
-<img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/Mannan-upgrade/SYMBA_REG/Upgrade_Mannan/plots/Postfix_exactmatch.png" width="45%" />
+<img src="plots/Prefix_exactmatch.png" width="45%" /> &nbsp;&nbsp;
+<img src="plots/Postfix_exactmatch.png" width="45%" />
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/postfix_parse.png" width="45%" />
+  <img src="plots/prefix_parse.png" width="45%" /> &nbsp;&nbsp;
+  <img src="plots/postfix_parse.png" width="45%" />
 </p>
 
 <p align="center">
   
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/postfix_data.png" height="350" width="49%" />
+  <img src="plots/prefix_data.png" height="350" width="49%" /> &nbsp;&nbsp;
+  <img src="plots/postfix_data.png" height="350" width="49%" />
 </p>
 
 <h3>2. The LM-JEPA Core Architecture &amp; Pipeline (Task 2.7)</h3>
 <p>A standard L2 prediction loss in a continuous Joint-Embedding environment causes both networks to instantly collapse and output vectors of all zeros. To prevent this, I engineered a stabilized continuous-space pipeline.</p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/lm_jepa_architecture.png" alt="LM-JEPA Architecture Pipeline" height="650" width="500" />
+  <img src="plots/lm_jepa_architecture.png" alt="LM-JEPA Architecture Pipeline" height="650" width="500" />
   <br><em>Figure: The LM-JEPA Pipeline bridging continuous physics (Context) and discrete math (Target).</em>
 </p>
 
@@ -136,7 +136,7 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
 <h4>Pretraining Results:</h4>
 <p>The training dynamics mathematically prove that the Context Encoder successfully maps continuous physical data to discrete mathematical structures without collapsing. The <strong>Variance Penalty</strong> flatlined at 0.000, the <strong>Latent Cosine Similarity</strong> aligned to a perfect 1.000, and the KDE plots verify a dense, decorrelated distribution of latent concepts.</p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/jepa_alignments_result.png" height="500" width="900" />
+  <img src="plots/jepa_alignments_result.png" height="500" width="900" />
 </p>
 
 <h3>3. Next-Gen Feature Encoders: KAN vs. MLP</h3>
@@ -146,7 +146,7 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><strong>Result:</strong> By using learnable B-splines on the edges instead of fixed linear node activations, the KAN converged significantly faster and achieved a lower MSE floor, proving its superiority for the upcoming Phase 1 scaling of LM-JEPA.</li>
 </ul>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Mannan-15/SYMBA/LM-JEPA/SYMBA_REG/LM-JEPA_Mannan/plots/kan_mlp.png" height="350" />
+  <img src="plots/kan_mlp.png" height="350" />
 </p>
 <hr>
 
@@ -158,5 +158,4 @@ To run the original 2024/2025 baseline model and observe the sequence bloat and 
   <li><code>src/library/</code>: <strong>[Previous Project's]</strong> The LASR Concept Library mapping logic.</li>
   <li><code>src/models/</code>: JEPA module definitions, continuous sliding window decoders, and KAN scripts.</li>
   <li><code>src/parser/</code>: The custom Postfix AST and symbolic parsing logic.</li>
-  <li><code>src/train_jepa_poc.py</code>: The master training loop for the LM-JEPA task.</li>
-</ul>
+  <li><code>src
